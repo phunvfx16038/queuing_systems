@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { Button, Form, Input, Col, Row } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import "./login.css";
 import { loginProp } from "../../dataTypes/loginType";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 const Login = () => {
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState<loginProp>({
     email: "",
     password: "",
   });
+
+  const [loginError, setLoginError] = useState<string>();
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, email: e.target.value });
@@ -23,10 +26,11 @@ const Login = () => {
   const checkLoginAccount = () => {
     signInWithEmailAndPassword(auth, loginData.email, loginData.password)
       .then((userCredential) => {
-        console.log(userCredential);
+        setLoginError("");
+        navigate("/dashboard");
       })
       .catch((err) => {
-        console.log(err);
+        setLoginError("Sai mật khẩu hoặc tên đăng nhập!");
       });
   };
 
@@ -67,6 +71,7 @@ const Login = () => {
                 value={loginData.password}
               />
             </Form.Item>
+            {loginError && <div className="errorLogin">{loginError}</div>}
             <Form.Item>
               <Link className="login-form-forgot" to="resetPassword">
                 Quên mật khẩu?

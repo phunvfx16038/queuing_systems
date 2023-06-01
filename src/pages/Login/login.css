@@ -1,5 +1,5 @@
 .left{
-    background-color: #B1B1B1;
+    background-color: #EAEAEC;
 }
 
 .left-content{
@@ -53,4 +53,8 @@ button:hover{
     text-transform: capitalize;
     font-weight: 700;
     font-size: 36px;
+}
+
+.errorLogin{
+    color:red
 }

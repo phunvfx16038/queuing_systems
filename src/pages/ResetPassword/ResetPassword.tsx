@@ -1,19 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Input, Col, Row } from "antd";
 import logo from "../../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 import "../Login/login.css";
 import "./resetPassword.css";
+import { auth } from "../../firebase/firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 const ResetPassword = () => {
+  const [email, setEmail] = useState<string>("");
+  const [errorEmail, setErrorEmail] = useState<string>("");
   const navigate = useNavigate();
   const cancleReset = () => {
     navigate("/");
   };
 
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
-    navigate("/enterResetPassword");
+  const handleEmailReset = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const onFinish = () => {
+    return sendPasswordResetEmail(auth, email)
+      .then((data) => {
+        // navigate("/enterResetPassword");
+      })
+      .catch((error) => {
+        setErrorEmail("không tìm thấy địa chỉ Email!");
+      });
   };
   return (
     <Row style={{ height: "100vh" }}>
@@ -31,14 +44,23 @@ const ResetPassword = () => {
             layout="vertical"
           >
             <div className="title-reset">Đặt lại mật khẩu</div>
+            <p>Vui lòng nhập email để đặt lại mật khẩu của bạn *</p>
             <Form.Item
+              name="email"
               rules={[
-                { required: true, message: "Please input your Username!" },
+                {
+                  type: "email",
+                  message: "E-mail không đúng định dạng!",
+                },
+                {
+                  required: true,
+                  message: "Vui lòng nhập Email!",
+                },
               ]}
             >
-              <p>Vui lòng nhập email để đặt lại mật khẩu của bạn *</p>
-              <Input />
+              <Input onChange={handleEmailReset} value={email} />
             </Form.Item>
+            {errorEmail && <div className="errorLogin">{errorEmail}</div>}
             <Form.Item style={{ textAlign: "center" }}>
               <Button
                 type="primary"

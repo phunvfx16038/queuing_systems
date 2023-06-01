@@ -3,10 +3,13 @@ import { Button, Form, Input, Col, Row } from "antd";
 import logo from "../../assets/images/logo.png";
 import "../Login/login.css";
 import "../ResetPassword/resetPassword.css";
+import { useNavigate } from "react-router-dom";
 
 const EnterResetPassword = () => {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+  const navigate = useNavigate();
+
+  const onFinish = () => {
+    navigate("/login");
   };
 
   return (
