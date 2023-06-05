@@ -1,88 +1,50 @@
-.header{
+h3{
+    color:#FF7506;
+    margin-bottom:20px;
+    font-size:24px;
+    font-weight: 700;
+}
+
+.wrap-chart{
+    background-color: #fff;
+    border-radius: 10px;
+    padding:10px 15px;
+    margin-top:20px;
+    color:#282739
+}
+
+.overview-card{
     display: flex;
     justify-content: space-between;
-    padding-inline: 20px;
-}
-
-.header .title{
-    color:#FF9138
-}
-
-.header .bell{
-    font-size: 18px;
-    border-radius: 50%;
-    text-align: center;
-    background-color: #FFF2E7;
-    padding:7px
-}
-
-.bell .bell-icon{
-    color:#FFAC6A
-}
-
-.header .wrapper-avatar{
-    display: flex;
     align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
     
 }
 
-.header .avatar-img{
-   padding:15px;
-   height: 100%;
-}
-
-.header .avatar-img>img{
-    width: 100%;
-    height: 100%;
-}
-
-.header .name{
+.over-view-progress{
     display: flex;
-    flex-direction: column;
-    line-height: normal;
+    align-items: center;
 }
 
-.header .name>span:first-child{
-    opacity: 0.6;
-    font-size: 12px;
+.overview-value{
+    font-size: 22px;
+    color: #535261;
+    margin-left: 15px;
+    font-weight: 700;
 }
 
-.demo-logo-vertical {
-  background-color: #fff;
-  text-align: center;
-  margin-bottom: 20px;
-  padding: 35px;
-}
-
-.demo-logo-vertical img {
-  width: 70%;
-}
-
-.logout{
-    padding:10px 25px;
+.overview-icon{
     color:#FF7506;
-    background-color:#FFF2E7;
-    margin-top: 130px;
+    font-size:14px
 }
 
-.icon-logout{
-    margin-right:10px
+.overview-status p{
+    color: #7E7D88;
+    opacity: 0.7;
 }
 
-.avatar-content{
-    width:80%;
-    height: auto;
-    margin-bottom: 20px;
-}
-
-.avatar-icon{
-    position:absolute;
-    right: 60px;
-    bottom: 15px;
-    font-size: 30px;
-    color: white;
-    background-color: #FF7506;
-    border-radius: 50%;
-    padding: 0px 5px;
-    cursor: pointer;
+.overview-status span{
+    color:#FF7506;
+    text-align: center;
 }

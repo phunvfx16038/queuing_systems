@@ -1,20 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Input, Col, Row } from "antd";
+import { PoweroffOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import "./login.css";
 import { loginProp } from "../../dataTypes/loginType";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import { loginUser } from "../../app/userSlice";
+
 const Login = () => {
+  const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [loginData, setLoginData] = useState<loginProp>({
     email: "",
     password: "",
   });
 
-  const [loginError, setLoginError] = useState<string>();
+  useEffect(() => {
+    if (user.user.email !== "") {
+      navigate("/userProfile");
+    }
+  }, [user, navigate]);
 
+  console.log(user);
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, email: e.target.value });
   };
@@ -23,19 +32,8 @@ const Login = () => {
     setLoginData({ ...loginData, password: e.target.value });
   };
 
-  const checkLoginAccount = () => {
-    signInWithEmailAndPassword(auth, loginData.email, loginData.password)
-      .then((userCredential) => {
-        setLoginError("");
-        navigate("/dashboard");
-      })
-      .catch((err) => {
-        setLoginError("Sai mật khẩu hoặc tên đăng nhập!");
-      });
-  };
-
   const onFinish = () => {
-    checkLoginAccount();
+    dispatch(loginUser(loginData));
   };
   return (
     <Row style={{ height: "100vh" }}>
@@ -71,7 +69,7 @@ const Login = () => {
                 value={loginData.password}
               />
             </Form.Item>
-            {loginError && <div className="errorLogin">{loginError}</div>}
+            {user.isError && <div className="errorLogin">{user.isError}</div>}
             <Form.Item>
               <Link className="login-form-forgot" to="resetPassword">
                 Quên mật khẩu?
@@ -79,13 +77,23 @@ const Login = () => {
             </Form.Item>
 
             <Form.Item style={{ textAlign: "center" }}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-              >
-                Đăng nhập
-              </Button>
+              {user.isLoading ? (
+                <Button
+                  type="primary"
+                  style={{ width: "100px" }}
+                  icon={<PoweroffOutlined />}
+                  loading
+                  className="login-form-button"
+                />
+              ) : (
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="login-form-button"
+                >
+                  Đăng nhập
+                </Button>
+              )}
             </Form.Item>
           </Form>
         </div>

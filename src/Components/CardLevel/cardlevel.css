@@ -1,0 +1,64 @@
+.cardlevel{
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px 10px;
+    color: #535261
+}
+
+.order-number{
+    display: flex;
+    margin-bottom:15px;
+}
+
+.wrap-icon{
+    font-size: 28px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    margin-right:20px;
+}
+
+.blue{
+    color: #6493F9;
+    background-color: #c5d3f1;
+}
+
+.green{
+    color:#35C75A;
+    background-color: #bde6c7;
+}
+
+.red{
+    color:#F86D6D;
+    background-color: #fac5c5;
+}
+
+.orange{
+    color:#FFAC6A;
+    background-color: #f8d5b8;
+}
+
+.order-text{
+    font-weight: 600;
+    color: #535261;
+}
+
+.order-value{
+    display:flex;
+    justify-content: space-between;
+    align-items:center
+}
+
+.value{
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.order-percent{
+    background-color: rgba(255, 149, 1, 0.15);
+    color:#FF9138;
+    font-size: 8px;
+    padding: 2px 10px;
+    border-radius: 25px;
+}

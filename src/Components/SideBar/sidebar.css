@@ -1,0 +1,26 @@
+.demo-logo-vertical {
+    background-color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 35px;
+  }
+  
+  .demo-logo-vertical img {
+    width: 70%;
+  }
+
+  .logout{
+    padding:10px 25px;
+    color:#FF7506;
+    background-color:#FFF2E7;
+    margin-top: 130px;
+}
+
+.icon-logout{
+    margin-right:10px
+}
+
+.ant-menu.ant-menu-light .ant-menu-item-selected {
+    background-color: #FF7506!important;
+    color: white!important
+  }

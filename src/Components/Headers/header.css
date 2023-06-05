@@ -1,0 +1,44 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 20px;
+}
+
+.header .bell{
+    font-size: 12px;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #FFF2E7;
+    padding:7px;
+    margin-top:6px;
+}
+
+.bell .bell-icon{
+    color:#FFAC6A
+}
+
+.header .wrapper-avatar{
+    display: flex;
+    align-items: center;
+}
+
+.header .avatar-img{
+   padding:15px;
+   height: 100%;
+}
+
+.header .avatar-img>img{
+    width: 100%;
+    height: 100%;
+}
+
+.header .name{
+    display: flex;
+    flex-direction: column;
+    line-height: normal;
+}
+
+.header .name>span:first-child{
+    opacity: 0.6;
+    font-size: 12px;
+}
