@@ -1,4 +1,4 @@
-h3{
+h3,h4{
     color:#FF7506;
     margin-bottom:20px;
     font-size:24px;
@@ -15,36 +15,58 @@ h3{
 
 .overview-card{
     display: flex;
-    justify-content: space-between;
     align-items: center;
     background-color: #fff;
-    border-radius: 10px;
-    
+    padding:10px;
+    box-shadow: 2px 2px 15px rgba(70, 64, 67, 0.1);
+    border-radius: 12px;
+    margin-bottom:10px
 }
 
 .over-view-progress{
     display: flex;
     align-items: center;
+    margin-right: 20px;
+}
+
+.overview-status{
+    flex-grow:2
+}
+
+.overview-status .circle{
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #FF7506;
+}
+
+.overview-status .status{
+    display: flex;
+    justify-content: space-between;
+    flex: 2;
+}
+
+.overview-status .status p{
+    margin: 0 8px;
+    color: #7E7D88;
+    opacity: 0.7;
+}
+
+.overview-status .status span{
+    font-weight: 700;
+    color:#FF7506;
 }
 
 .overview-value{
     font-size: 22px;
     color: #535261;
-    margin-left: 15px;
+    margin-left: 10px;
     font-weight: 700;
 }
 
 .overview-icon{
     color:#FF7506;
-    font-size:14px
-}
-
-.overview-status p{
-    color: #7E7D88;
-    opacity: 0.7;
-}
-
-.overview-status span{
-    color:#FF7506;
-    text-align: center;
+    font-size:12px;
+    display: flex;
+    align-items: center;
 }

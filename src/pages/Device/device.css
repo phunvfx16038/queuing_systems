@@ -1,0 +1,83 @@
+.wrap-device{
+    display: flex;
+    justify-content: space-between;
+}
+
+.wrap-select{
+    display: flex;
+}
+
+.select{
+    width:300px;
+}
+.wrap-select .select{
+    margin-right:15px;
+}
+
+.wrap-device label{
+    color:#282739;
+    margin-bottom: 10px;
+    font-weight: 600;
+    display: block;
+}
+
+.ant-select-arrow .anticon-down,.ant-btn-icon{
+    color:#FF7506;
+}
+
+.ant-btn-default{
+    border-left:none
+}
+
+.ant-table-wrapper .ant-table-thead >tr>th{
+    background-color:#FF9138;
+    color:#ffffff
+}
+
+.ant-table-wrapper .ant-table-thead >tr>.ant-table-cell:before{
+    height:80px!important
+}
+
+.ant-table-wrapper .ant-table-thead >tr>th:last-child,.ant-table-wrapper .ant-table-thead >tr>th:nth-child(7){
+    color:#FF9138
+}
+
+.ant-table-tbody>tr>td{
+    border:1px solid #FFF2E7
+}
+
+.circle{
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right:5px
+}
+
+.stop{
+    background-color:#EC3740
+}
+
+.active{
+    background-color:#35C75A
+}
+
+.add-device{
+    background-color: #FFF2E7;
+    color:#FF9138;
+    text-align: center;
+    height: 100px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 9px;
+    margin-top: 150px;
+}
+
+.add-device .icon-add-device{
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.add-device .text-add-device{
+    font-weight: 600;
+    font-size: 16px;
+}

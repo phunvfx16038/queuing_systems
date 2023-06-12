@@ -61,7 +61,7 @@ const SideBar = () => {
       <div className="demo-logo-vertical">
         <img src={logo} alt="logo" />
       </div>
-      <Menu theme="light" mode="inline" defaultSelectedKeys={["1"]}>
+      <Menu theme="light" mode="inline">
         {sideBar?.map((item, index) => (
           <Menu.Item key={index} icon={item.icon}>
             <Link to={item.link}>{item.title}</Link>
