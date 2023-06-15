@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import Login from "./pages/Login/Login";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import EnterResetPassword from "./pages/EnterResetPassword";
 import DashBoard from "./pages/dashboard";
@@ -14,31 +14,44 @@ import Device from "./pages/Device";
 import AddDevice from "./pages/AddDevice";
 import DetailDevice from "./pages/DetailDevice";
 import EditDevice from "./pages/EditDevice";
+import Service from "./pages/Service";
+import AddService from "./pages/AddService";
+import DetailService from "./pages/DetailService";
+import EditService from "./pages/EditService";
+import Progression from "./pages/Progression";
 
 type protectProp = {
   children: JSX.Element;
 };
 
 function App() {
+  const location = useLocation();
+  const pathName = location.pathname;
   const user = useAppSelector((state) => state.user.user);
   // const ProtectedRoute = ({ children }: protectProp) => {
-  //   if (user.email === "") {
+  //   if (pathName === "/resetPassword") {
+  //     return <Navigate to="/resetPassword" />;
+  //   } else if (pathName === "/enterResetPassword") {
+  //     return <Navigate to="/enterResetPassword" />;
+  //   } else if (user.email === "") {
   //     return <Navigate to="/" />;
   //   }
-
   //   return children;
   // };
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Login />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/enterResetPassword" element={<EnterResetPassword />} />
+        <Route path="/" element={<Login />} />
       </Routes>
       {/* <ProtectedRoute> */}
-      <Layout>
+      <Layout hasSider>
         <SideBar />
-        <Layout style={{ backgroundColor: "#EAEAEC" }}>
+        <Layout
+          style={{ backgroundColor: "#EAEAEC", marginLeft: 200 }}
+          className="site-layout"
+        >
           <Headers />
           <Routes>
             <Route path="/userProfile" element={<UserProfile />} />
@@ -48,6 +61,18 @@ function App() {
               <Route path="themthietbi" element={<AddDevice />} />
               <Route path="chitietthietbi" element={<DetailDevice />} />
               <Route path="capnhatthietbi" element={<EditDevice />} />
+            </Route>
+            <Route path="dichvu">
+              <Route index element={<Service />} />
+              <Route path="themdichvu" element={<AddService />} />
+              <Route path="chitietdichvu" element={<DetailService />} />
+              <Route path="capnhatdichvu" element={<EditService />} />
+            </Route>
+            <Route path="capso">
+              <Route index element={<Progression />} />
+              {/* <Route path="themdichvu" element={<AddService />} />
+              <Route path="chitietdichvu" element={<DetailService />} />
+              <Route path="capnhatdichvu" element={<EditService />} /> */}
             </Route>
           </Routes>
         </Layout>

@@ -1,6 +1,7 @@
 .wrap-device{
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .wrap-select{
@@ -61,11 +62,19 @@
     background-color:#35C75A
 }
 
+.working{
+    background-color: #5490EB;
+}
+
+.absent{
+    background-color: #6C7585;
+}
+
 .add-device{
     background-color: #FFF2E7;
     color:#FF9138;
     text-align: center;
-    height: 100px;
+    height: 80px;
     border-bottom-left-radius: 10px;
     border-top-left-radius: 10px;
     padding: 9px;

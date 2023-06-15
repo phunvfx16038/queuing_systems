@@ -1,52 +1,88 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Select, Input, Table } from "antd";
-import "./device.css";
+import { Layout, Select, Input, Table, DatePicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillPlusSquare } from "react-icons/ai";
-import { useAppDispatch, useAppSelector } from "../../app/store";
-import {
-  deviceCollection,
-  filterConnect,
-  getDevices,
-} from "../../app/deviceSlice";
 import { onSnapshot } from "firebase/firestore";
-import { deviceProp } from "../../propTypes/deviceType";
-
+import { serviceProp } from "../../propTypes/serviceType";
+import dayjs from "dayjs";
 const { Content } = Layout;
 const { Search } = Input;
+const dataSource = [
+  {
+    service_code: "KIO_01",
+    service_name: "Kiosk",
+    description: "Mô tả dịch vụ 1",
+    active: true,
+  },
+  {
+    service_code: "KIO_01",
+    service_name: "Kiosk",
+    description: "Mô tả dịch vụ 1",
+    active: true,
+  },
+  {
+    service_code: "KIO_01",
+    service_name: "Kiosk",
+    description: "Mô tả dịch vụ 1",
+    active: false,
+  },
+  {
+    service_code: "KIO_01",
+    service_name: "Kiosk",
+    description: "Mô tả dịch vụ 1",
+    active: true,
+  },
+  {
+    service_code: "KIO_01",
+    service_name: "Kiosk",
+    description: "Mô tả dịch vụ 1",
+    active: false,
+  },
+  {
+    service_code: "KIO_01",
+    service_name: "Kiosk",
+    description: "Mô tả dịch vụ 1",
+    active: true,
+  },
+  {
+    service_code: "KIO_01",
+    service_name: "Kiosk",
+    description: "Mô tả dịch vụ 1",
+    active: true,
+  },
+];
 
-const Device = () => {
-  const dispatch = useAppDispatch();
-  const allDevices = useAppSelector((state) => state.devices.device);
+const { RangePicker } = DatePicker;
+const dateFormat = "YYYY/MM/DD";
+const Service = () => {
+  //   useEffect(() => {
+  //     onSnapshot(deviceCollection, (snapshot) => {
+  //       let data = snapshot.docs.map((doc) => {
+  //         return {
+  //           id: doc.id,
+  //           ...doc.data(),
+  //         };
+  //       });
+  //       dispatch(getDevices(data));
+  //     });
+  //   }, [dispatch]);
 
-  useEffect(() => {
-    onSnapshot(deviceCollection, (snapshot) => {
-      let data = snapshot.docs.map((doc) => {
-        return {
-          id: doc.id,
-          ...doc.data(),
-        };
-      });
-      dispatch(getDevices(data));
-    });
-  }, [dispatch]);
-
-  const columns: ColumnsType<deviceProp> = [
+  const columns: ColumnsType<serviceProp> = [
     {
-      title: "Mã thiết bị",
-      dataIndex: "code",
-      key: "code",
+      title: "Mã dịch vụ",
+      dataIndex: "service_code",
+      key: "service_code",
     },
     {
-      title: "Tên thiết bị",
-      dataIndex: "name",
-      key: "name",
+      title: "Tên dịch vụ",
+      dataIndex: "service_name",
+      key: "service_name",
     },
     {
-      title: "Địa chỉ IP",
-      dataIndex: "ip_address",
-      key: "ip_address",
+      title: "Mô tả",
+      dataIndex: "description",
+      key: "description",
     },
     {
       title: "Trạng thái hoạt động",
@@ -66,38 +102,11 @@ const Device = () => {
         ),
     },
     {
-      title: "Trạng thái kết nối",
-      dataIndex: "connect",
-      key: "connect",
-      render: (state) =>
-        state ? (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle active"></div>
-            <div>Kết nối</div>
-          </div>
-        ) : (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle stop"></div>
-            <div>Ngắt Kết nối</div>
-          </div>
-        ),
-    },
-    {
-      title: "Dịch vụ sử dụng",
-      dataIndex: "using_service",
-      key: "using_service",
-      render: (data) => (
-        <>
-          <div>{data.toString()}</div>
-        </>
-      ),
-    },
-    {
       title: "empty",
       dataIndex: "detail",
       key: "detail",
       render: (_, record) => (
-        <Link to="/thietbi/chitietthietbi" state={{ record }}>
+        <Link to="/dichvu/chitietdichvu" state={{ record }}>
           Chi tiết
         </Link>
       ),
@@ -107,7 +116,7 @@ const Device = () => {
       dataIndex: "update",
       key: "update",
       render: (_, record) => (
-        <Link to="/thietbi/capnhatthietbi" state={{ record }}>
+        <Link to="/dichvu/capnhatdichvu" state={{ record }}>
           Cập nhật
         </Link>
       ),
@@ -115,23 +124,17 @@ const Device = () => {
   ];
   const navigate = useNavigate();
   const [actionSelect, setActionSelect] = useState<string>("");
-  const [connectSelect, setConnectSelect] = useState<string>("");
   const [search, setSearch] = useState("");
   const handleChangeAction = (value: string) => {
     setActionSelect(value);
-  };
-
-  const handleChangeConnect = (value: string) => {
-    setConnectSelect(value);
-    dispatch(filterConnect(value));
   };
 
   const onSearch = (value: string) => {
     setSearch(value);
   };
 
-  const handleAddDevice = () => {
-    navigate("/thietbi/themthietbi");
+  const handleAddService = () => {
+    navigate("/dichvu/themdichvu");
   };
 
   return (
@@ -160,17 +163,13 @@ const Device = () => {
               />
             </div>
             <div className="select">
-              <label>Trạng thái kết nối</label>
-              <Select
-                style={{ width: "100%" }}
-                onChange={handleChangeConnect}
-                placeholder="Tất cả"
-                value={connectSelect}
-                options={[
-                  { value: "all", label: "Tất cả" },
-                  { value: "true", label: "Kết nối" },
-                  { value: "false", label: "Mất kết nối" },
+              <label>Chọn thời gian</label>
+              <RangePicker
+                defaultValue={[
+                  dayjs("2015/01/01", dateFormat),
+                  dayjs("2015/01/01", dateFormat),
                 ]}
+                format={dateFormat}
               />
             </div>
           </div>
@@ -186,18 +185,18 @@ const Device = () => {
         </div>
         <Table
           columns={columns}
-          dataSource={allDevices}
+          dataSource={dataSource}
           style={{ marginTop: "15px" }}
         />
       </Content>
       <div className="add-device">
-        <div className="icon-add-device" onClick={handleAddDevice}>
+        <div className="icon-add-device" onClick={handleAddService}>
           <AiFillPlusSquare />
         </div>
-        <div className="text-add-device">Thêm thiết bị</div>
+        <div className="text-add-device">Thêm dịch vụ</div>
       </div>
     </div>
   );
 };
 
-export default Device;
+export default Service;

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Calendar, Col, Layout, Progress, Row, Select } from "antd";
+import { Col, Layout, Progress, Row, Select } from "antd";
 import CardLevel from "../../Components/CardLevel";
-import "./dashboard.css";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,6 +26,10 @@ import { CiGrid42, CiMonitor, CiReceipt } from "react-icons/ci";
 import { theme } from "antd";
 import type { CalendarMode } from "antd/es/calendar/generateCalendar";
 import type { Dayjs } from "dayjs";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import "./dashboard.css";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -96,7 +99,7 @@ const DashBoard = () => {
   const { token } = theme.useToken();
 
   const wrapperStyle: React.CSSProperties = {
-    width: 300,
+    width: 330,
     border: `1px solid ${token.colorBorderSecondary}`,
     borderRadius: token.borderRadiusLG,
   };
@@ -347,7 +350,11 @@ const DashBoard = () => {
           </div>
         </div>
         <div style={wrapperStyle}>
-          <Calendar fullscreen={false} onPanelChange={onPanelChange} />
+          <Calendar
+            calendarType="ISO 8601"
+            locale="en-EN"
+            defaultValue={new Date()}
+          />
         </div>
       </div>
     </div>

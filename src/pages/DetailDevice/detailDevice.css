@@ -1,3 +1,7 @@
+.ant-layout {
+    box-sizing: unset;
+}
+
 .wrap-detail{
     margin-bottom:15px
 }

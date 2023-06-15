@@ -61,12 +61,19 @@ export const deviceSlice = createSlice({
     reducers:{
         getDevices:(state,action)=>{
             state.device = action.payload
-        }
+        },
+        filterConnect: (state, action) => {
+            return{
+                ...state,
+                device: state.device.filter((device) => 
+                      device.connect === (action.payload==='true'))
+                }
+            }
     },
     extraReducers:(builder)=>{
        
     }
 })
 
-export const { getDevices } = deviceSlice.actions;
+export const { getDevices,filterConnect } = deviceSlice.actions;
 export default deviceSlice.reducer
