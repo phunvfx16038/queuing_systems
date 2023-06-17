@@ -12,7 +12,7 @@ const Headers = () => {
   const userLogin = useAppSelector((state) => state.user.user);
   return (
     <Header style={{ backgroundColor: "#EAEAEC" }} className="header">
-      <BreadCrumb />
+      {/* <BreadCrumb /> */}
       <div className="wrapper-avatar">
         <Badge className="bell">
           <FaBell className="bell-icon" />

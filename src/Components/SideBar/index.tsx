@@ -8,7 +8,7 @@ import {
   CiLogout,
 } from "react-icons/ci";
 import { FaBuffer, FaRegComments } from "react-icons/fa";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, MenuProps } from "antd";
 import "./sidebar.css";
 import { Link } from "react-router-dom";
 
@@ -38,11 +38,6 @@ const sideBar = [
     title: "Báo cáo",
     icon: <CiReceipt />,
     link: "/baocao",
-  },
-  {
-    title: "Cài đặt hệ thống",
-    icon: <CiSettings />,
-    link: "/caidathethong",
   },
 ];
 const SideBar = () => {
@@ -76,6 +71,16 @@ const SideBar = () => {
           </Menu.Item>
         ))}
       </Menu>
+      <div className="dropdown">
+        <div className="dropbtn">
+          <CiSettings /> Cài đặt hệ thống
+        </div>
+        <div className="dropdown-content">
+          <Link to="/quanlyvaitro">Quản lý vai trò </Link>
+          <Link to="/quanlytaikhoan">Quản lý tài khoản</Link>
+          <Link to="/quanlynguoidung">Quản lý người dùng</Link>
+        </div>
+      </div>
       <div className="logout">
         <span className="icon-logout">
           <CiLogout />

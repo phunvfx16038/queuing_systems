@@ -24,3 +24,38 @@
     background-color: #FF7506!important;
     color: white!important
   }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    padding: 10px 30px;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    top:100%
+  }
+  
+  .dropdown-content a {
+    color: #7E7D88;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {background-color: #FF7506;color:#fff}
+  
+  .dropdown:hover{
+    background-color: rgba(0, 0, 0, 0.06);
+    border-radius: 5px;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  

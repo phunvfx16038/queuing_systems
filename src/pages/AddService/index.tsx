@@ -70,6 +70,7 @@ const AddService = () => {
                 name="service_code"
                 label="Mã dịch vụ"
                 rules={[{ required: true }]}
+                initialValue={service_code}
               >
                 <Input
                   onChange={(e) => setServiceCode(e.target.value)}
@@ -99,7 +100,11 @@ const AddService = () => {
               </Form.Item>
             </Col>
             <div style={{ display: "flex", width: "100%" }}>
-              <Form.Item name="countAuto" valuePropName="checked">
+              <Form.Item
+                name="countAuto"
+                valuePropName="checked"
+                initialValue={autoCount}
+              >
                 <Checkbox
                   onChange={(e) => setAutoCount(e.target.checked)}
                   checked={autoCount}
@@ -108,7 +113,7 @@ const AddService = () => {
                   Tăng tự động từ
                 </Checkbox>
               </Form.Item>
-              <Form.Item name="autoCountValue1">
+              <Form.Item name="autoCountValue1" initialValue={autoCountValue1}>
                 <Input
                   placeholder="0001"
                   style={{
@@ -121,7 +126,7 @@ const AddService = () => {
                 />
               </Form.Item>
               đến
-              <Form.Item name="autoCountValue2">
+              <Form.Item name="autoCountValue2" initialValue={autoCountValue2}>
                 <Input
                   placeholder="9999"
                   style={{ width: "60px", marginLeft: "10px" }}
@@ -131,7 +136,11 @@ const AddService = () => {
               </Form.Item>
             </div>
             <div style={{ display: "flex", width: "100%" }}>
-              <Form.Item name="prefix" valuePropName="checked">
+              <Form.Item
+                name="prefix"
+                valuePropName="checked"
+                initialValue={prefix}
+              >
                 <Checkbox
                   checked={prefix}
                   onChange={(e) => setPrefix(e.target.checked)}
@@ -139,7 +148,7 @@ const AddService = () => {
                   Prefix
                 </Checkbox>
               </Form.Item>
-              <Form.Item name="prefixValue">
+              <Form.Item name="prefixValue" initialValue={prefixValue}>
                 <Input
                   placeholder="0001"
                   style={{ width: "60px", marginLeft: "80px" }}
@@ -149,7 +158,11 @@ const AddService = () => {
               </Form.Item>
             </div>
             <div style={{ display: "flex", width: "100%" }}>
-              <Form.Item name="surfix" valuePropName="checked">
+              <Form.Item
+                name="surfix"
+                valuePropName="checked"
+                initialValue={surfix}
+              >
                 <Checkbox
                   onChange={(e) => setSurfix(e.target.checked)}
                   checked={surfix}
@@ -157,7 +170,7 @@ const AddService = () => {
                   Surfix
                 </Checkbox>
               </Form.Item>
-              <Form.Item name="surfixValue">
+              <Form.Item name="surfixValue" initialValue={surfixValue}>
                 <Input
                   placeholder="0001"
                   style={{ width: "60px", marginLeft: "80px" }}
@@ -170,6 +183,7 @@ const AddService = () => {
               name="reset"
               style={{ width: "100%" }}
               valuePropName="checked"
+              initialValue={reset}
             >
               <Checkbox
                 onChange={(e) => setReset(e.target.checked)}

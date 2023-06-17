@@ -6,6 +6,7 @@ import { AiFillPlusSquare } from "react-icons/ai";
 import { onSnapshot } from "firebase/firestore";
 import { serviceProp } from "../../propTypes/serviceType";
 import dayjs from "dayjs";
+import "./service.css";
 const { Content } = Layout;
 const { Search } = Input;
 const dataSource = [
@@ -187,6 +188,7 @@ const Service = () => {
           columns={columns}
           dataSource={dataSource}
           style={{ marginTop: "15px" }}
+          className="service-table"
         />
       </Content>
       <div className="add-device">

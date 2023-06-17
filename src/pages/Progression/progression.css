@@ -1,3 +1,23 @@
 .ant-table-wrapper .ant-table-thead >tr>th:nth-child(7){
     color:#FFFFFF
 }
+
+.ant-picker-panel .ant-picker-header .ant-picker-header-super-prev-btn,
+.ant-picker-panel .ant-picker-header .ant-picker-header-super-next-btn
+{
+    display: none;
+}
+.ant-picker-panel .ant-picker-header .ant-picker-header-next-btn,
+.ant-picker-panel .ant-picker-header .ant-picker-header-prev-btn,
+.ant-picker-panel .ant-picker-header .ant-picker-header-view,
+.ant-picker-panel .ant-picker-body .ant-picker-content thead>tr>th
+{
+    color:hsl(27, 100%, 61%)
+}
+
+.ant-picker-panel .ant-picker-body tr .ant-picker-cell-selected .ant-picker-cell-inner,
+.ant-picker-panel .ant-picker-body tr .ant-picker-cell-range-end .ant-picker-cell-inner
+{
+    background-color:hsl(27, 100%, 61%);
+    color:#FFFFFF
+}

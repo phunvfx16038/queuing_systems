@@ -203,8 +203,8 @@ const Progression = () => {
     setSearch(value);
   };
 
-  const handleAddService = () => {
-    navigate("/dichvu/themdichvu");
+  const handleAddNumber = () => {
+    navigate("/capso/themso");
   };
 
   return (
@@ -227,8 +227,11 @@ const Progression = () => {
                 value={actionSelect}
                 options={[
                   { value: "all", label: "Tất cả" },
-                  { value: "true", label: "Hoạt động" },
-                  { value: "false", label: "Ngừng hoạt động" },
+                  { value: "gynecological", label: "Khám sản phụ khoa" },
+                  { value: "teeth", label: "Khám răng hàm mặt" },
+                  { value: "otolaryngology", label: "Khám tai mũi họng" },
+                  { value: "general", label: "Khám tổng quát" },
+                  { value: "respiratory", label: "Khám hô hấp" },
                 ]}
               />
             </div>
@@ -241,8 +244,9 @@ const Progression = () => {
                 value={actionSelect}
                 options={[
                   { value: "all", label: "Tất cả" },
-                  { value: "true", label: "Hoạt động" },
-                  { value: "false", label: "Ngừng hoạt động" },
+                  { value: "waiting", label: "Đang chờ" },
+                  { value: "used", label: "Đã sử dụng" },
+                  { value: "skip", label: "Bỏ qua" },
                 ]}
               />
             </div>
@@ -255,8 +259,8 @@ const Progression = () => {
                 value={actionSelect}
                 options={[
                   { value: "all", label: "Tất cả" },
-                  { value: "true", label: "Hoạt động" },
-                  { value: "false", label: "Ngừng hoạt động" },
+                  { value: "kiosk", label: "Kiosk" },
+                  { value: "system", label: "Hệ thống" },
                 ]}
               />
             </div>
@@ -288,7 +292,7 @@ const Progression = () => {
         />
       </Content>
       <div className="add-device">
-        <div className="icon-add-device" onClick={handleAddService}>
+        <div className="icon-add-device" onClick={handleAddNumber}>
           <AiFillPlusSquare />
         </div>
         <div className="text-add-device">Cấp số mới</div>

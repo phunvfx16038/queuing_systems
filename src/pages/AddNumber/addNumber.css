@@ -1,0 +1,13 @@
+.add-number .ant-row .ant-col{
+    text-align:center
+}
+
+.add-number .ant-row .ant-col label{
+    color:#535261;
+    font-size:20px;
+    font-weight: 700; 
+}
+
+.ant-select-selector{
+    text-align:left
+}

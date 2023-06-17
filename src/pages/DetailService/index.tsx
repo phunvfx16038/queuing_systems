@@ -4,6 +4,7 @@ import { FaPen } from "react-icons/fa";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 const { Content } = Layout;
 const { Search } = Input;
 const { RangePicker } = DatePicker;
@@ -73,6 +74,14 @@ const DetailService = () => {
         ),
     },
   ];
+  const navigate = useNavigate();
+  const navigateToAddService = () => {
+    navigate("/dichvu/themdichvu");
+  };
+
+  const backToPreviousPage = () => {
+    navigate(-1);
+  };
   const onSearch = (value: string) => {};
   return (
     <Content
@@ -209,13 +218,13 @@ const DetailService = () => {
         </div>
         <div style={{ width: "7%" }}>
           <div className="add-device" style={{ marginTop: 0 }}>
-            <div className="icon-add-device">
+            <div className="icon-add-device" onClick={navigateToAddService}>
               <FaPen />
             </div>
             <div className="text-add-device">Thêm dịch vụ</div>
           </div>
           <div className="add-device" style={{ marginTop: "15px" }}>
-            <div className="icon-add-device">
+            <div className="icon-add-device" onClick={backToPreviousPage}>
               <BsArrowReturnLeft />
             </div>
             <div className="text-add-device">Quay lại</div>

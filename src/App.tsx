@@ -19,6 +19,11 @@ import AddService from "./pages/AddService";
 import DetailService from "./pages/DetailService";
 import EditService from "./pages/EditService";
 import Progression from "./pages/Progression";
+import AddNumber from "./pages/AddNumber";
+import DetailNumber from "./pages/DetailNumber";
+import Report from "./pages/Report";
+import Managerole from "./pages/ManageRole";
+import AddRole from "./pages/AddRole";
 
 type protectProp = {
   children: JSX.Element;
@@ -70,10 +75,12 @@ function App() {
             </Route>
             <Route path="capso">
               <Route index element={<Progression />} />
-              {/* <Route path="themdichvu" element={<AddService />} />
-              <Route path="chitietdichvu" element={<DetailService />} />
-              <Route path="capnhatdichvu" element={<EditService />} /> */}
+              <Route path="themso" element={<AddNumber />} />
+              <Route path="chitietcapso" element={<DetailNumber />} />
             </Route>
+            <Route path="/baocao" element={<Report />} />
+            <Route path="/quanlyvaitro" element={<Managerole />} />
+            <Route path="/themvaitro" element={<AddRole />} />
           </Routes>
         </Layout>
       </Layout>
