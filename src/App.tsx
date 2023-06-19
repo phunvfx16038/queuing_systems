@@ -24,6 +24,11 @@ import DetailNumber from "./pages/DetailNumber";
 import Report from "./pages/Report";
 import Managerole from "./pages/ManageRole";
 import AddRole from "./pages/AddRole";
+import EditRole from "./pages/EditRole";
+import ManageAccount from "./pages/ManageAccount";
+import AddAccount from "./pages/AddAccount";
+import EditAccount from "./pages/EditAccount";
+import UserDiary from "./pages/UserDiary";
 
 type protectProp = {
   children: JSX.Element;
@@ -79,8 +84,17 @@ function App() {
               <Route path="chitietcapso" element={<DetailNumber />} />
             </Route>
             <Route path="/baocao" element={<Report />} />
-            <Route path="/quanlyvaitro" element={<Managerole />} />
-            <Route path="/themvaitro" element={<AddRole />} />
+            <Route path="quanlyvaitro">
+              <Route index element={<Managerole />} />
+              <Route path="themvaitro" element={<AddRole />} />
+              <Route path="capnhatvaitro" element={<EditRole />} />
+            </Route>
+            <Route path="quanlytaikhoan">
+              <Route index element={<ManageAccount />} />
+              <Route path="themtaikhoan" element={<AddAccount />} />
+              <Route path="capnhattaikhoan" element={<EditAccount />} />
+            </Route>
+            <Route path="/nhatkynguoidung" element={<UserDiary />} />
           </Routes>
         </Layout>
       </Layout>

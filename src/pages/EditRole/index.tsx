@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Layout,
-  Input,
-  Row,
-  Col,
-  Form,
-  Button,
-  Checkbox,
-} from "antd";
+import { Layout, Input, Row, Col, Form, Button, Checkbox } from "antd";
 import { serviceProp } from "../../propTypes/serviceType";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { CheckboxValueType } from "antd/es/checkbox/Group";
@@ -18,7 +10,7 @@ const { TextArea } = Input;
 const plainOptions = ["Chức năng x", "Chức năng y", "Chức năng z"];
 const defaultCheckedList = ["Chức năng x"];
 const CheckboxGroup = Checkbox.Group;
-const AddRole = () => {
+const EditRole = () => {
   const [checkedListA, setCheckedListA] =
     useState<CheckboxValueType[]>(defaultCheckedList);
   const [checkedListB, setCheckedListB] =
@@ -168,7 +160,7 @@ const AddRole = () => {
             htmlType="submit"
             className="login-form-button"
           >
-            Thêm
+            Cập nhật
           </Button>
         </Form.Item>
       </Form>
@@ -176,4 +168,4 @@ const AddRole = () => {
   );
 };
 
-export default AddRole;
+export default EditRole;

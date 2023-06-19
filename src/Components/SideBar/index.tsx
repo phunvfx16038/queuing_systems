@@ -78,7 +78,7 @@ const SideBar = () => {
         <div className="dropdown-content">
           <Link to="/quanlyvaitro">Quản lý vai trò </Link>
           <Link to="/quanlytaikhoan">Quản lý tài khoản</Link>
-          <Link to="/quanlynguoidung">Quản lý người dùng</Link>
+          <Link to="/nhatkynguoidung">Nhật ký người dùng</Link>
         </div>
       </div>
       <div className="logout">

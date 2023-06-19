@@ -75,7 +75,7 @@ const Managerole = () => {
       dataIndex: "update",
       key: "update",
       render: (_, record) => (
-        <Link to="/dichvu/capnhatdichvu" state={{ record }}>
+        <Link to="/quanlyvaitro/capnhatvaitro" state={{ record }}>
           Cập nhật
         </Link>
       ),
@@ -90,7 +90,7 @@ const Managerole = () => {
   };
 
   const handleAddRole = () => {
-    navigate("/themvaitro");
+    navigate("/quanlyvaitro/themvaitro");
   };
 
   return (
