@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { serviceProp } from "../propTypes/serviceType"
-import { addDoc, collection, getFirestore } from "firebase/firestore"
+import { addDoc, collection, doc, getFirestore, setDoc } from "firebase/firestore"
 import { app } from "../firebase/firebase"
 
 export type initProp = {
@@ -9,7 +9,7 @@ export type initProp = {
     isError:undefined|string
 }
 export const db = getFirestore(app)
-export const deviceCollection = collection(db,'devices')
+export const serviceCollection = collection(db,'services')
 
 const initialState:initProp = {
     service:[],
@@ -17,16 +17,20 @@ const initialState:initProp = {
     isError:undefined
 }
 
+type editServiceType={
+    id:string
+    editData:serviceProp
+}
+
 const addServicesToFireBase = async (service:serviceProp) =>{
-    await addDoc(deviceCollection,{...service})
+    await addDoc(serviceCollection,{...service})
 }
 
 export const addService = createAsyncThunk(
-    'device/addDevice',
-    async(device:serviceProp)=>{
+    'service/addservice',
+    async(service:serviceProp)=>{
         try{
-            const res = await addServicesToFireBase(device)
-            console.log(res)
+            const res = await addServicesToFireBase(service)
            return res
         }catch(err){
             return err
@@ -35,10 +39,28 @@ export const addService = createAsyncThunk(
     }
 )
 
+export const editService = createAsyncThunk(
+    'service,editService',
+    async(editData:editServiceType)=>{
+        try{
+            const getService = doc(db,`services/${editData.id}`)
+            const res = await setDoc(getService,editData.editData,{merge:true})
+            console.log(res)
+        }catch(err){
+            console.log(err)
+        }
+
+    }
+)
+
 export const serviceSlice = createSlice({
     name:'service',
     initialState,
-    reducers:{}
+    reducers:{
+        getServices:(state,action)=>{
+            state.service = action.payload
+        },
+    }
 })
-
+export const {getServices} = serviceSlice.actions
 export default serviceSlice.reducer

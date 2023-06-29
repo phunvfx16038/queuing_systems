@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import {
-  Layout,
-  Input,
-  Row,
-  Col,
-  Form,
-  Button,
-  Checkbox,
-} from "antd";
-import { serviceProp } from "../../propTypes/serviceType";
+import { Layout, Input, Row, Col, Form, Button, Checkbox } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { CheckboxValueType } from "antd/es/checkbox/Group";
+import { roleProp } from "../../propTypes/roleType";
+import { useAppDispatch } from "../../app/store";
+import { addRoleManage } from "../../app/roleSlice";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -19,6 +13,9 @@ const plainOptions = ["Chức năng x", "Chức năng y", "Chức năng z"];
 const defaultCheckedList = ["Chức năng x"];
 const CheckboxGroup = Checkbox.Group;
 const AddRole = () => {
+  const dispatch = useAppDispatch();
+  const [roleName, setRoleName] = useState("");
+  const [description, setDescription] = useState("");
   const [checkedListA, setCheckedListA] =
     useState<CheckboxValueType[]>(defaultCheckedList);
   const [checkedListB, setCheckedListB] =
@@ -52,7 +49,15 @@ const AddRole = () => {
     setCheckAllB(e.target.checked);
   };
 
-  const onFinish = (values: serviceProp) => {};
+  const onFinish = (values: roleProp) => {
+    const newRoleManage = {
+      ...values,
+      roleA: checkedListA,
+      roleB: checkedListB,
+    };
+
+    dispatch(addRoleManage(newRoleManage));
+  };
 
   return (
     <Content
@@ -83,16 +88,34 @@ const AddRole = () => {
               <Form.Item
                 name="role_name"
                 label="Tên vai trò"
-                rules={[{ required: true }]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Tên vai trò không được để trống!",
+                  },
+                ]}
               >
-                <Input placeholder="Nhập tên vai trò" />
+                <Input
+                  placeholder="Nhập tên vai trò"
+                  value={roleName}
+                  onChange={(e) => setRoleName(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="description"
                 label="Mô tả"
-                rules={[{ required: true }]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Mô tả vai trò không được để trống!",
+                  },
+                ]}
               >
-                <TextArea rows={5} />
+                <TextArea
+                  rows={5}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </Form.Item>
               <div>
                 <span style={{ color: "red" }}>*</span>
@@ -113,7 +136,7 @@ const AddRole = () => {
               >
                 <div>
                   <h4 style={{ fontSize: "18px" }}>Nhóm chức năng A</h4>
-                  <Form.Item style={{ marginBottom: 0 }} name="allSelect">
+                  <Form.Item style={{ marginBottom: 0 }}>
                     <Checkbox
                       indeterminate={indeterminateA}
                       onChange={onCheckAllAChangeRoleA}

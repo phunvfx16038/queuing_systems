@@ -10,52 +10,49 @@ import {
   SelectProps,
   Checkbox,
 } from "antd";
+import { useActionData, useLocation } from "react-router-dom";
+import { serviceProp } from "../../propTypes/serviceType";
+import { useAppDispatch } from "../../app/store";
+import { editService } from "../../app/serviceSlice";
 
 const { Content } = Layout;
-const { Option } = Select;
+const { TextArea } = Input;
 
 const EditService = () => {
-  const [code, setCode] = useState("");
-  const [name, setName] = useState("");
-  const [ipAddress, setIpAddress] = useState("");
-  const [type, setType] = useState("");
-  const [logInName, setLogInName] = useState("");
-  const [password, setPassword] = useState("");
-  const [usingService, setUsingService] = useState<string[]>([]);
-  const options: SelectProps["options"] = [];
-
-  const [randomNumber0To7] = useState<number>(() =>
-    Math.floor(Math.random() * 7)
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const editData = location.state.record;
+  const [serviceCode, setServiceCode] = useState(editData.service_code);
+  const [serviceName, setServiceName] = useState(editData.service_name);
+  const [description, setDescription] = useState(editData.description);
+  const [autoCount, setAutoCount] = useState(editData.autoCount);
+  const [autoCountValue, setAutoCountValue] = useState(editData.autoCountValue);
+  const [autoCountValue1, setAutoCountValue1] = useState(
+    editData.autoCountValue1
   );
+  const [autoCountValue2, setAutoCountValue2] = useState(
+    editData.autoCountValue2
+  );
+  const [prefix, setPrefix] = useState(editData.prefix);
+  const [prefixValue, setPrefixValue] = useState(editData.prefixValue);
+  const [surfix, setSurfix] = useState(editData.surfix);
+  const [surfixValue, setSurfixValue] = useState(editData.surfixValue);
+  const [reset, setReset] = useState(editData.reset);
 
-  const { TextArea } = Input;
-  const optionData = [
-    "Khám tim mạch",
-    "Khám phụ khoa",
-    "Khám răng hàm mặt",
-    "Khám tai mũi họng",
-    "Khám hô hấp",
-    "Khám tổng quát",
-  ];
+  const onFinish = (values: serviceProp) => {
+    let newService = { ...values };
+    console.log(values);
+    if (prefix === false) {
+      setPrefixValue(0);
+      newService = { ...values, prefixValue, autoCountValue };
+    }
 
-  for (let i = 0; i < optionData.length; i++) {
-    options.push({
-      label: optionData[i],
-      value: optionData[i],
-    });
-  }
+    if (surfix === false) {
+      setSurfixValue(0);
+      newService = { ...values, surfixValue, autoCountValue };
+    }
 
-  const onChangeSelectDevice = (value: string) => {
-    setType(value);
-  };
-
-  const handleChangeUsingService = (value: string[]) => {
-    setUsingService(value);
-  };
-
-  const onFinish = () => {
-    // const active = randomNumber0To7 % 2 === 0 ? true : false;
-    // const newDice = { ...values, active };
+    dispatch(editService({ id: editData.id, editData: newService }));
   };
 
   return (
@@ -85,73 +82,146 @@ const EditService = () => {
             </h4>
             <Col span={12}>
               <Form.Item
-                name="code"
+                name="serviceCode"
                 label="Mã dịch vụ"
                 rules={[{ required: true }]}
+                initialValue={serviceCode}
               >
-                <Input onChange={(e) => setCode(e.target.value)} value={code} />
+                <Input
+                  onChange={(e) => setServiceCode(e.target.value)}
+                  value={serviceCode}
+                />
               </Form.Item>
               <Form.Item
-                name="name"
+                name="serviceName"
                 label="Tên dịch vụ"
                 rules={[{ required: true }]}
+                initialValue={serviceName}
               >
-                <Input onChange={(e) => setName(e.target.value)} value={name} />
+                <Input
+                  onChange={(e) => setServiceName(e.target.value)}
+                  value={serviceName}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name={["user", "introduction"]} label="Introduction">
-                <TextArea rows={5} />
+              <Form.Item
+                name={["user", "introduction"]}
+                label="Introduction"
+                initialValue={description}
+              >
+                <TextArea
+                  rows={5}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    setDescription(e.target.value)
+                  }
+                />
               </Form.Item>
             </Col>
-            <Form.Item
-              name="using_service"
-              rules={[{ required: true }]}
-              style={{ width: "100%" }}
-            >
-              <Checkbox>Tăng tự động từ</Checkbox>
-              <Input
-                placeholder="0001"
-                style={{
-                  width: "60px",
-                  marginLeft: "15px",
-                  marginRight: "10px",
-                }}
-              />
+            <div style={{ display: "flex", width: "100%" }}>
+              <Form.Item
+                name="countAuto"
+                valuePropName="checked"
+                initialValue={autoCount}
+              >
+                <Checkbox
+                  onChange={(e) => setAutoCount(e.target.checked)}
+                  checked={autoCount}
+                  defaultChecked={autoCount}
+                >
+                  Tăng tự động từ
+                </Checkbox>
+              </Form.Item>
+              <Form.Item
+                name="autoCountValue1"
+                initialValue={autoCount ? autoCountValue1 : 0}
+              >
+                <Input
+                  placeholder="0001"
+                  style={{
+                    width: "60px",
+                    marginLeft: "15px",
+                    marginRight: "10px",
+                  }}
+                  onChange={(e) => setAutoCountValue1(Number(e.target.value))}
+                  value={autoCountValue1}
+                />
+              </Form.Item>
               đến
-              <Input
-                placeholder="9999"
-                style={{ width: "60px", marginLeft: "10px" }}
-              />
-            </Form.Item>
+              <Form.Item
+                name="autoCountValue2"
+                initialValue={autoCount ? autoCountValue2 : 0}
+              >
+                <Input
+                  placeholder="9999"
+                  style={{ width: "60px", marginLeft: "10px" }}
+                  onChange={(e) => setAutoCountValue2(Number(e.target.value))}
+                  value={autoCountValue2}
+                />
+              </Form.Item>
+            </div>
+            <div style={{ display: "flex", width: "100%" }}>
+              <Form.Item
+                name="prefix"
+                valuePropName="checked"
+                initialValue={prefix}
+              >
+                <Checkbox
+                  checked={prefix}
+                  onChange={(e) => setPrefix(e.target.checked)}
+                >
+                  Prefix
+                </Checkbox>
+              </Form.Item>
+              <Form.Item
+                name="prefixValue"
+                initialValue={prefix ? prefixValue : 0}
+              >
+                <Input
+                  placeholder="0001"
+                  style={{ width: "60px", marginLeft: "80px" }}
+                  onChange={(e) => setPrefixValue(Number(e.target.value))}
+                  value={prefixValue}
+                />
+              </Form.Item>
+            </div>
+            <div style={{ display: "flex", width: "100%" }}>
+              <Form.Item
+                name="surfix"
+                valuePropName="checked"
+                initialValue={surfix}
+              >
+                <Checkbox
+                  onChange={(e) => setSurfix(e.target.checked)}
+                  checked={surfix}
+                >
+                  Surfix
+                </Checkbox>
+              </Form.Item>
+              <Form.Item
+                name="surfixValue"
+                initialValue={surfix ? surfixValue : 0}
+              >
+                <Input
+                  placeholder="0001"
+                  style={{ width: "60px", marginLeft: "80px" }}
+                  onChange={(e) => setSurfixValue(Number(e.target.value))}
+                  value={surfixValue}
+                />
+              </Form.Item>
+            </div>
             <Form.Item
-              name="using_service"
-              rules={[{ required: true }]}
+              name="reset"
               style={{ width: "100%" }}
+              valuePropName="checked"
+              initialValue={reset}
             >
-              <Checkbox>Prefix</Checkbox>
-              <Input
-                placeholder="0001"
-                style={{ width: "60px", marginLeft: "80px" }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="using_service"
-              rules={[{ required: true }]}
-              style={{ width: "100%" }}
-            >
-              <Checkbox>Surfix</Checkbox>
-              <Input
-                placeholder="0001"
-                style={{ width: "60px", marginLeft: "80px" }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="using_service"
-              rules={[{ required: true }]}
-              style={{ width: "100%" }}
-            >
-              <Checkbox>Reset mỗi ngày</Checkbox>
+              <Checkbox
+                onChange={(e) => setReset(e.target.checked)}
+                checked={reset}
+              >
+                Reset mỗi ngày
+              </Checkbox>
             </Form.Item>
             <div>
               <span style={{ color: "red" }}>*</span>
@@ -172,7 +242,7 @@ const EditService = () => {
             htmlType="submit"
             className="login-form-button"
           >
-            Thêm dịch vụ
+            Cập nhật
           </Button>
         </Form.Item>
       </Form>

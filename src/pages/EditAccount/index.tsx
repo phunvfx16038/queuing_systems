@@ -11,19 +11,41 @@ import {
   Checkbox,
 } from "antd";
 import { serviceProp } from "../../propTypes/serviceType";
+import { useAppDispatch } from "../../app/store";
+import { userType } from "../../dataTypes/userType";
+import { useLocation } from "react-router-dom";
 
 const { Content } = Layout;
-const { TextArea } = Input;
 
 const EditAccount = () => {
-  const [randomNumber0To7] = useState<number>(() =>
-    Math.floor(Math.random() * 7)
-  );
+  const location = useLocation();
+  const editAccountData = location.state.record;
 
-  const onFinish = (values: serviceProp) => {
-    console.log(values);
-    const active = randomNumber0To7 % 2 === 0 ? true : false;
-    // const newDice = { ...values, active };
+  const [displayName, setDisplayName] = useState(editAccountData.displayName);
+  const [userName, setUserName] = useState(editAccountData.user_name);
+  const [phone, setPhone] = useState(editAccountData.phone);
+  const [password, setPassword] = useState(editAccountData.password);
+  const [reTypepassword, setRetypePassword] = useState(editAccountData.retype);
+  const [email, setEmail] = useState(editAccountData.email);
+  const [role, setRole] = useState(editAccountData.role);
+  const [active, setActive] = useState(editAccountData.active);
+
+  const dispatch = useAppDispatch();
+
+  // const [randomNumber0To7] = useState<number>(() =>
+  //   Math.floor(Math.random() * 7)
+  // );
+
+  const handleChangeRole = (value: string) => {
+    setRole(value);
+  };
+
+  const handleChangeActive = (value: string) => {
+    setActive(value);
+  };
+
+  const onFinish = (values: userType) => {
+    // dispatch(createNewUser(values));
   };
 
   return (
@@ -53,30 +75,45 @@ const EditAccount = () => {
             </h4>
             <Col span={12}>
               <Form.Item
-                name="name"
+                name="displayName"
                 label="Họ tên"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng nhập Họ tên!" }]}
+                initialValue={displayName}
               >
-                <Input />
+                <Input
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="phone"
                 label="Số điện thoại"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập số điện thoại!" },
+                ]}
+                initialValue={phone}
               >
-                <Input />
+                <Input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="email"
                 label="Email"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng nhập Email!" }]}
+                initialValue={email}
               >
-                <Input />
+                <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="role"
                 label="Vai trò"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng chọn vai trò!" }]}
+                initialValue={role}
               >
                 <Select
                   placeholder="Tất cả"
@@ -87,6 +124,8 @@ const EditAccount = () => {
                     { value: "manager", label: "Quản lý" },
                     { value: "admin", label: "Admin" },
                   ]}
+                  value={role}
+                  onChange={handleChangeRole}
                 />
               </Form.Item>
             </Col>
@@ -94,37 +133,54 @@ const EditAccount = () => {
               <Form.Item
                 name="user_name"
                 label="Tên đăng nhập"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+                ]}
+                initialValue={userName}
               >
-                <Input />
+                <Input
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="password"
                 label="Mật khẩu"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+                initialValue={password}
               >
-                <Input />
+                <Input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="retype"
                 label="Nhập lại mật khẩu"
                 rules={[{ required: true }]}
+                initialValue={reTypepassword}
               >
-                <Input />
+                <Input
+                  value={reTypepassword}
+                  onChange={(e) => setRetypePassword(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="active"
                 label="Tình trạng"
                 rules={[{ required: true }]}
+                initialValue={active}
               >
                 <Select
                   placeholder="Tất cả"
                   style={{ width: "100%" }}
                   options={[
                     { value: "all", label: "Tất cả" },
-                    { value: "true", label: "Hoạt động" },
-                    { value: "false", label: "Ngưng hoạt động" },
+                    { value: true, label: "Hoạt động" },
+                    { value: false, label: "Ngưng hoạt động" },
                   ]}
+                  value={active}
+                  onChange={handleChangeActive}
                 />
               </Form.Item>
             </Col>
@@ -148,7 +204,7 @@ const EditAccount = () => {
             htmlType="submit"
             className="login-form-button"
           >
-            Cập nhật
+            Thêm
           </Button>
         </Form.Item>
       </Form>

@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import Login from "./pages/Login/Login";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import EnterResetPassword from "./pages/EnterResetPassword";
 import DashBoard from "./pages/dashboard";
-import { useAppSelector } from "./app/store";
+import { useAppDispatch, useAppSelector } from "./app/store";
 import UserProfile from "./pages/UserProfile";
 import { Layout } from "antd";
 import SideBar from "./Components/SideBar";
@@ -29,6 +29,11 @@ import ManageAccount from "./pages/ManageAccount";
 import AddAccount from "./pages/AddAccount";
 import EditAccount from "./pages/EditAccount";
 import UserDiary from "./pages/UserDiary";
+import { onSnapshot } from "firebase/firestore";
+import { deviceCollection } from "./app/deviceSlice";
+import { getServices, serviceCollection } from "./app/serviceSlice";
+import { getRoleManage, roleManageCollection } from "./app/roleSlice";
+import { getUsers, userCollection } from "./app/userSlice";
 
 type protectProp = {
   children: JSX.Element;
@@ -36,8 +41,10 @@ type protectProp = {
 
 function App() {
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const pathName = location.pathname;
   const user = useAppSelector((state) => state.user.user);
+
   // const ProtectedRoute = ({ children }: protectProp) => {
   //   if (pathName === "/resetPassword") {
   //     return <Navigate to="/resetPassword" />;
@@ -59,7 +66,10 @@ function App() {
       <Layout hasSider>
         <SideBar />
         <Layout
-          style={{ backgroundColor: "#EAEAEC", marginLeft: 200 }}
+          style={{
+            backgroundColor: "#EAEAEC",
+            marginLeft: 200,
+          }}
           className="site-layout"
         >
           <Headers />

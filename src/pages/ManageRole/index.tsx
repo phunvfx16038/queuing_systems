@@ -1,92 +1,91 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Input, Table, DatePicker } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { roleProp } from "../../propTypes/roleType";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import { getRoleManage, roleManageCollection } from "../../app/roleSlice";
+import { onSnapshot } from "firebase/firestore";
 const { Content } = Layout;
 const { Search } = Input;
-const dataSource = [
+
+const columns: ColumnsType<roleProp> = [
   {
-    role_name: "Kế toán",
-    user_number: 6,
-    description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
+    title: "Tên vai trò",
+    dataIndex: "role_name",
+    key: "role_name",
   },
   {
-    role_name: "Bác sĩ",
-    user_number: 6,
-    description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
+    title: "Số người dùng",
+    dataIndex: "userNumber",
+    key: "userNumber",
   },
   {
-    role_name: "Admin",
-    user_number: 6,
-    description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
+    title: "Mô tả",
+    dataIndex: "description",
+    key: "description",
   },
   {
-    role_name: "Kế toán",
-    user_number: 6,
-    description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-  },
-  {
-    role_name: "Lễ Tân",
-    user_number: 6,
-    description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-  },
-  {
-    role_name: "SuperAdmin",
-    user_number: 6,
-    description: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
+    title: "empty",
+    dataIndex: "update",
+    key: "update",
+    render: (_, record) => (
+      <Link to="/quanlyvaitro/capnhatvaitro" state={{ record }}>
+        Cập nhật
+      </Link>
+    ),
   },
 ];
 
-const { RangePicker } = DatePicker;
-const dateFormat = "YYYY/MM/DD";
 const Managerole = () => {
-  //   useEffect(() => {
-  //     onSnapshot(deviceCollection, (snapshot) => {
-  //       let data = snapshot.docs.map((doc) => {
-  //         return {
-  //           id: doc.id,
-  //           ...doc.data(),
-  //         };
-  //       });
-  //       dispatch(getDevices(data));
-  //     });
-  //   }, [dispatch]);
-
-  const columns: ColumnsType<roleProp> = [
-    {
-      title: "Tên vai trò",
-      dataIndex: "role_name",
-      key: "role_name",
-    },
-    {
-      title: "Số người dùng",
-      dataIndex: "user_number",
-      key: "user_number",
-    },
-    {
-      title: "Mô tả",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "empty",
-      dataIndex: "update",
-      key: "update",
-      render: (_, record) => (
-        <Link to="/quanlyvaitro/capnhatvaitro" state={{ record }}>
-          Cập nhật
-        </Link>
-      ),
-    },
-  ];
   const navigate = useNavigate();
-  const [actionSelect, setActionSelect] = useState<string>("");
+  const dispatch = useAppDispatch();
+  const roleManageData = useAppSelector((state) => state.roleManage.roleManage);
+  const userData = useAppSelector((state) => state.user.user);
+
+  const data = roleManageData.map((role: any) => {
+    const usersInRole = userData.reduce(
+      (count: number, user: { role: any }) => {
+        if (user.role === role.roleName) {
+          count++;
+        }
+        return count;
+      },
+      0
+    );
+
+    return {
+      ...role,
+      usersNumber: usersInRole,
+    };
+  });
+
+  const [roleManage, setRoleManage] = useState(data);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    onSnapshot(roleManageCollection, (snapshot) => {
+      let data: any = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      dispatch(getRoleManage(data));
+      setRoleManage(data);
+    });
+  }, [dispatch]);
 
   const onSearch = (value: string) => {
     setSearch(value);
+    const searchRoleData = roleManageData.filter((role) => {
+      return (
+        role.description.toLowerCase().includes(value.toLowerCase()) ||
+        role.role_name.toLowerCase().includes(value.toLowerCase())
+      );
+    });
+    setRoleManage(searchRoleData);
   };
 
   const handleAddRole = () => {
@@ -94,7 +93,7 @@ const Managerole = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", height: "100vh" }}>
       <Content
         style={{
           margin: "24px 16px 0",
@@ -115,7 +114,7 @@ const Managerole = () => {
         </div>
         <Table
           columns={columns}
-          dataSource={dataSource}
+          dataSource={roleManage}
           style={{ marginTop: "15px" }}
           className="service-table"
         />

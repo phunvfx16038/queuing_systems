@@ -1,0 +1,51 @@
+
+.ant-modal .ant-modal-content{
+    padding:0;
+    text-align: center;
+}
+
+.ant-modal .ant-modal-header{
+    padding:20px 0;
+}
+
+.ant-modal .ant-modal-header .ant-modal-title{
+    font-size: 22px;
+    font-weight:600
+}
+
+.ant-modal .ant-modal-body p{
+    margin-bottom: 10px;
+}
+
+.ant-modal .ant-modal-body p span{
+    font-weight: 700;
+}
+
+.ant-modal .ant-modal-footer{
+    background-color: #FF9138;
+    text-align: center;
+    padding:20px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.ant-modal .ant-modal-footer p{
+    margin-bottom:10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.ant-modal .ant-modal-close{
+    color:#FF9138
+}
+
+.number{
+    font-size: 48px;
+    color:#FF9138;
+    font-weight: 700;
+}
+
+.footer-text{
+    color:#fff;
+    font-size: 16px;
+}

@@ -1,4 +1,9 @@
-.item{
-    color: #FF9138;
-    font-size:20px;
+.breadcrum-text {
+  color:#fff;
+  font-size: 20px;
+}
+
+.breadcrum .active{
+    color: #ff9138;
+    background-color:unset
 }

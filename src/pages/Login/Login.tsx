@@ -17,11 +17,11 @@ const Login = () => {
     password: "",
   });
 
-  useEffect(() => {
-    if (user.user.email !== "") {
-      navigate("/userProfile");
-    }
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   if (user.user.email !== "") {
+  //     navigate("/userProfile");
+  //   }
+  // }, [user, navigate]);
 
   console.log(user);
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {

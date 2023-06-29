@@ -32,9 +32,7 @@ const EditDevice = () => {
   };
 
   const onFinish = (values: deviceProp) => {
-    console.log(values);
     const newEditData: EditType = { id, editData: values };
-    console.log(newEditData);
     dispatch(editDevice(newEditData));
   };
 

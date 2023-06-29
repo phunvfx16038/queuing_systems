@@ -11,6 +11,8 @@ import {
   Checkbox,
 } from "antd";
 import { serviceProp } from "../../propTypes/serviceType";
+import { useAppDispatch } from "../../app/store";
+import { addService } from "../../app/serviceSlice";
 
 const { Content } = Layout;
 
@@ -28,16 +30,44 @@ const AddService = () => {
   const [surfixValue, setSurfixValue] = useState(0);
   const [reset, setReset] = useState(false);
 
-  const [randomNumber0To7] = useState<number>(() =>
-    Math.floor(Math.random() * 7)
+  const dispatch = useAppDispatch();
+
+  const [randomNumber0To20] = useState<number>(() =>
+    Math.floor(Math.random() * 20)
   );
 
   const { TextArea } = Input;
 
   const onFinish = (values: serviceProp) => {
-    console.log(values);
-    const active = randomNumber0To7 % 2 === 0 ? true : false;
-    // const newDice = { ...values, active };
+    let newService = { ...values };
+    const active = randomNumber0To20 % 2 === 0 ? true : false;
+    const status =
+      randomNumber0To20 < 7
+        ? "completed"
+        : randomNumber0To20 < 20 && randomNumber0To20 > 10
+        ? "used"
+        : "skip";
+    if (autoCount) {
+      setAutoCountValue(autoCountValue1 + autoCountValue2);
+      newService = { ...values, active, autoCountValue, status };
+    } else {
+      setAutoCountValue(0);
+      setAutoCountValue1(0);
+      setAutoCountValue2(0);
+      newService = { ...values, active, autoCountValue, status };
+    }
+
+    if (prefix === false) {
+      setPrefixValue(0);
+      newService = { ...values, active, prefixValue, autoCountValue, status };
+    }
+
+    if (surfix === false) {
+      setSurfixValue(0);
+      newService = { ...values, active, surfixValue, autoCountValue, status };
+    }
+
+    dispatch(addService(newService));
   };
 
   return (

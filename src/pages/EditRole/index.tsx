@@ -1,20 +1,29 @@
 import React, { useState } from "react";
 import { Layout, Input, Row, Col, Form, Button, Checkbox } from "antd";
-import { serviceProp } from "../../propTypes/serviceType";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { CheckboxValueType } from "antd/es/checkbox/Group";
+import { useAppDispatch } from "../../app/store";
+import { useLocation } from "react-router-dom";
+import { roleProp } from "../../propTypes/roleType";
+import { editRoleManage } from "../../app/roleSlice";
 
 const { Content } = Layout;
 const { TextArea } = Input;
 
 const plainOptions = ["Chức năng x", "Chức năng y", "Chức năng z"];
-const defaultCheckedList = ["Chức năng x"];
 const CheckboxGroup = Checkbox.Group;
 const EditRole = () => {
-  const [checkedListA, setCheckedListA] =
-    useState<CheckboxValueType[]>(defaultCheckedList);
-  const [checkedListB, setCheckedListB] =
-    useState<CheckboxValueType[]>(defaultCheckedList);
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const roleManage = location.state.record;
+  const [roleName, setRoleName] = useState(roleManage.role_name);
+  const [description, setDescription] = useState(roleManage.description);
+  const [checkedListA, setCheckedListA] = useState<CheckboxValueType[]>(
+    roleManage.roleA
+  );
+  const [checkedListB, setCheckedListB] = useState<CheckboxValueType[]>(
+    roleManage.roleB
+  );
   const [indeterminateA, setIndeterminateA] = useState(false);
   const [checkAllA, setCheckAllA] = useState(false);
   const [indeterminateB, setIndeterminateB] = useState(false);
@@ -44,7 +53,14 @@ const EditRole = () => {
     setCheckAllB(e.target.checked);
   };
 
-  const onFinish = (values: serviceProp) => {};
+  const onFinish = (values: roleProp) => {
+    const roleManageData = {
+      ...values,
+      roleA: checkedListA,
+      roleB: checkedListB,
+    };
+    dispatch(editRoleManage({ id: roleManage.id, roleManageData }));
+  };
 
   return (
     <Content
@@ -76,15 +92,25 @@ const EditRole = () => {
                 name="role_name"
                 label="Tên vai trò"
                 rules={[{ required: true }]}
+                initialValue={roleName}
               >
-                <Input placeholder="Nhập tên vai trò" />
+                <Input
+                  placeholder="Nhập tên vai trò"
+                  value={roleName}
+                  onChange={(e) => setRoleName(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="description"
                 label="Mô tả"
                 rules={[{ required: true }]}
+                initialValue={description}
               >
-                <TextArea rows={5} />
+                <TextArea
+                  rows={5}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </Form.Item>
               <div>
                 <span style={{ color: "red" }}>*</span>
@@ -105,7 +131,7 @@ const EditRole = () => {
               >
                 <div>
                   <h4 style={{ fontSize: "18px" }}>Nhóm chức năng A</h4>
-                  <Form.Item style={{ marginBottom: 0 }} name="allSelect">
+                  <Form.Item style={{ marginBottom: 0 }}>
                     <Checkbox
                       indeterminate={indeterminateA}
                       onChange={onCheckAllAChangeRoleA}
@@ -114,7 +140,7 @@ const EditRole = () => {
                       Tất cả
                     </Checkbox>
                   </Form.Item>
-                  <Form.Item>
+                  <Form.Item initialValue={checkedListA}>
                     <CheckboxGroup
                       options={plainOptions}
                       value={checkedListA}
@@ -134,7 +160,7 @@ const EditRole = () => {
                       Tất cả
                     </Checkbox>
                   </Form.Item>
-                  <Form.Item>
+                  <Form.Item initialValue={checkedListB}>
                     <CheckboxGroup
                       options={plainOptions}
                       value={checkedListB}

@@ -1,144 +1,124 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Input, Table, DatePicker, Select } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillPlusSquare } from "react-icons/ai";
-import { managerAccountProp } from "../../propTypes/manageAccountTypes";
 import "./manageAccount.css";
+import { userType } from "../../dataTypes/userType";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import { onSnapshot } from "firebase/firestore";
+import { getUsers, userCollection } from "../../app/userSlice";
 
 const { Content } = Layout;
 const { Search } = Input;
-const dataSource = [
+
+const columns: ColumnsType<userType> = [
   {
-    user_name: "tuyennguyen@12",
-    name: "Nguyen Van A",
-    phone: 20876543211,
-    email: "tuyennguyen12@gmail.com",
-    role: "Kế toán",
-    active: true,
+    title: "Tên đăng nhập",
+    dataIndex: "user_name",
+    key: "user_name",
   },
   {
-    user_name: "tuyennguyen@16",
-    name: "Nguyen Van B",
-    phone: 20876543211,
-    email: "tuyennguyen16@gmail.com",
-    role: "Kế toán",
-    active: false,
+    title: "Họ tên",
+    dataIndex: "displayName",
+    key: "displayName",
   },
   {
-    user_name: "tuyennguyen@122",
-    name: "Nguyen Van D",
-    phone: 20876543211,
-    email: "tuyennguyen122@gmail.com",
-    role: "Quản lý",
-    active: true,
+    title: "Số điện thoại",
+    dataIndex: "phone",
+    key: "phone",
   },
   {
-    user_name: "tuyennguyen@142",
-    name: "Nguyen Van E",
-    phone: 20876543211,
-    email: "tuyennguyen142@gmail.com",
-    role: "Admin",
-    active: true,
+    title: "Email",
+    dataIndex: "phone",
+    key: "phone",
   },
   {
-    user_name: "tuyennguyen@12",
-    name: "Nguyen Van A",
-    phone: 20876543211,
-    email: "tuyennguyen12@gmail.com",
-    role: "Kế toán",
-    active: false,
+    title: "Vai trò",
+    dataIndex: "role",
+    key: "role",
+    render: (state) =>
+      state === "admin" ? (
+        <div>Admin</div>
+      ) : state === "manager" ? (
+        <div>Quản lý</div>
+      ) : (
+        <div>Kế toán</div>
+      ),
   },
   {
-    user_name: "tuyennguyen@12",
-    name: "Nguyen Van A",
-    phone: 20876543211,
-    email: "tuyennguyen12@gmail.com",
-    role: "Kế toán",
-    active: true,
+    title: "Trạng thái hoạt động",
+    dataIndex: "active",
+    key: "active",
+    render: (state) =>
+      state ? (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="circle active"></div>
+          <div>Hoạt động</div>
+        </div>
+      ) : (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="circle stop"></div>
+          <div>Ngừng hoạt động</div>
+        </div>
+      ),
+  },
+  {
+    title: "empty",
+    dataIndex: "update",
+    key: "update",
+    render: (_, record) => (
+      <Link to="/quanlytaikhoan/capnhattaikhoan" state={{ record }}>
+        Cập nhật
+      </Link>
+    ),
   },
 ];
-
-const { RangePicker } = DatePicker;
-const dateFormat = "YYYY/MM/DD";
 const ManageAccount = () => {
-  //   useEffect(() => {
-  //     onSnapshot(deviceCollection, (snapshot) => {
-  //       let data = snapshot.docs.map((doc) => {
-  //         return {
-  //           id: doc.id,
-  //           ...doc.data(),
-  //         };
-  //       });
-  //       dispatch(getDevices(data));
-  //     });
-  //   }, [dispatch]);
-
-  const columns: ColumnsType<managerAccountProp> = [
-    {
-      title: "Tên đăng nhập",
-      dataIndex: "user_name",
-      key: "user_name",
-    },
-    {
-      title: "Họ tên",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Số điện thoại",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "Email",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "Vai trò",
-      dataIndex: "role",
-      key: "role",
-    },
-    {
-      title: "Trạng thái hoạt động",
-      dataIndex: "active",
-      key: "active",
-      render: (state) =>
-        state ? (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle active"></div>
-            <div>Hoạt động</div>
-          </div>
-        ) : (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle stop"></div>
-            <div>Ngừng hoạt động</div>
-          </div>
-        ),
-    },
-    {
-      title: "empty",
-      dataIndex: "update",
-      key: "update",
-      render: (_, record) => (
-        <Link to="/quanlytaikhoan/capnhattaikhoan" state={{ record }}>
-          Cập nhật
-        </Link>
-      ),
-    },
-  ];
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [actionSelect, setActionSelect] = useState<string>("");
+  const manageAccountData = useAppSelector((state) => state.user.user);
+  const [manageAccounts, setManageAccounts] = useState(manageAccountData);
   const [search, setSearch] = useState("");
-  const [roleSelect, setRoleSelect] = useState("");
+  const [active, setActive] = useState("");
 
-  const handleSelectRole = (value: string) => {
-    setRoleSelect(value);
+  useEffect(() => {
+    onSnapshot(userCollection, (snapshot) => {
+      let data: any = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      dispatch(getUsers(data));
+      setManageAccounts(data);
+    });
+  }, [dispatch]);
+
+  const handleSelectActive = (value: string) => {
+    setActive(value);
+    if (value === "all") {
+      setManageAccounts(manageAccountData);
+    } else {
+      const filterData = manageAccountData.filter((manageaccount) => {
+        return manageaccount.active === (value === "true");
+      });
+      setManageAccounts(filterData);
+    }
   };
 
   const onSearch = (value: string) => {
     setSearch(value);
+    const searchUserData = manageAccountData.filter((manageaccount) => {
+      return (
+        manageaccount.displayName.toLowerCase().includes(value.toLowerCase()) ||
+        manageaccount.email.toLowerCase().includes(value.toLowerCase()) ||
+        manageaccount.phone.toLowerCase().includes(value.toLowerCase()) ||
+        manageaccount.role.toLowerCase().includes(value.toLowerCase()) ||
+        manageaccount.user_name.toLowerCase().includes(value.toLowerCase())
+      );
+    });
+    setManageAccounts(searchUserData);
   };
 
   const handleAddRole = () => {
@@ -146,7 +126,7 @@ const ManageAccount = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", height: "100vh" }}>
       <Content
         style={{
           margin: "24px 16px 0",
@@ -161,13 +141,12 @@ const ManageAccount = () => {
               <Select
                 placeholder="Tất cả"
                 style={{ width: "100%" }}
-                onChange={handleSelectRole}
-                value={roleSelect}
+                onChange={handleSelectActive}
+                value={active}
                 options={[
                   { value: "all", label: "Tất cả" },
-                  { value: "accountant", label: "Kế toán" },
-                  { value: "manager", label: "Quản lý" },
-                  { value: "admin", label: "Admin" },
+                  { value: "true", label: "Hoạt động" },
+                  { value: "false", label: "Ngừng hoạt động" },
                 ]}
               />
             </div>
@@ -184,7 +163,7 @@ const ManageAccount = () => {
         </div>
         <Table
           columns={columns}
-          dataSource={dataSource}
+          dataSource={manageAccounts}
           style={{ marginTop: "15px" }}
           className="account-table"
         />

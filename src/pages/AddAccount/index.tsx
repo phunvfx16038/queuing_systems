@@ -1,29 +1,36 @@
 import React, { useState } from "react";
-import {
-  Layout,
-  Select,
-  Input,
-  Row,
-  Col,
-  Form,
-  Button,
-  SelectProps,
-  Checkbox,
-} from "antd";
-import { serviceProp } from "../../propTypes/serviceType";
+import { Layout, Select, Input, Row, Col, Form, Button } from "antd";
+import { userType } from "../../dataTypes/userType";
+import { useAppDispatch } from "../../app/store";
+import { createNewUser } from "../../app/userSlice";
 
 const { Content } = Layout;
-const { TextArea } = Input;
 
 const AddAccount = () => {
-  const [randomNumber0To7] = useState<number>(() =>
-    Math.floor(Math.random() * 7)
-  );
+  const [displayName, setDisplayName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+  const [active, setActive] = useState("");
 
-  const onFinish = (values: serviceProp) => {
-    console.log(values);
-    const active = randomNumber0To7 % 2 === 0 ? true : false;
-    // const newDice = { ...values, active };
+  const dispatch = useAppDispatch();
+
+  // const [randomNumber0To7] = useState<number>(() =>
+  //   Math.floor(Math.random() * 7)
+  // );
+
+  const handleChangeRole = (value: string) => {
+    setRole(value);
+  };
+
+  const handleChangeActive = (value: string) => {
+    setActive(value);
+  };
+
+  const onFinish = (values: userType) => {
+    dispatch(createNewUser(values));
   };
 
   return (
@@ -53,30 +60,41 @@ const AddAccount = () => {
             </h4>
             <Col span={12}>
               <Form.Item
-                name="name"
+                name="displayName"
                 label="Họ tên"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng nhập Họ tên!" }]}
               >
-                <Input />
+                <Input
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="phone"
                 label="Số điện thoại"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập số điện thoại!" },
+                ]}
               >
-                <Input />
+                <Input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="email"
                 label="Email"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng nhập Email!" }]}
               >
-                <Input />
+                <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="role"
                 label="Vai trò"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng chọn vai trò!" }]}
               >
                 <Select
                   placeholder="Tất cả"
@@ -87,6 +105,8 @@ const AddAccount = () => {
                     { value: "manager", label: "Quản lý" },
                     { value: "admin", label: "Admin" },
                   ]}
+                  value={role}
+                  onChange={handleChangeRole}
                 />
               </Form.Item>
             </Col>
@@ -94,23 +114,34 @@ const AddAccount = () => {
               <Form.Item
                 name="user_name"
                 label="Tên đăng nhập"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+                ]}
               >
-                <Input />
+                <Input
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="password"
                 label="Mật khẩu"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
               >
-                <Input />
+                <Input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="retype"
                 label="Nhập lại mật khẩu"
                 rules={[{ required: true }]}
               >
-                <Input />
+                <Input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="active"
@@ -122,9 +153,11 @@ const AddAccount = () => {
                   style={{ width: "100%" }}
                   options={[
                     { value: "all", label: "Tất cả" },
-                    { value: "true", label: "Hoạt động" },
-                    { value: "false", label: "Ngưng hoạt động" },
+                    { value: true, label: "Hoạt động" },
+                    { value: false, label: "Ngưng hoạt động" },
                   ]}
+                  value={active}
+                  onChange={handleChangeActive}
                 />
               </Form.Item>
             </Col>

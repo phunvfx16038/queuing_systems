@@ -1,7 +1,7 @@
 export type deviceProp = {
     code:string
     name:string
-    ip_address:string|number
+    ip_address:number
     type:string
     login_name:string
     password:string

@@ -1,7 +1,8 @@
+import { data } from './../pages/dashboard/index';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { app } from "../firebase/firebase";
 import { deviceProp } from "../propTypes/deviceType";
-import {addDoc, collection, doc, getFirestore, setDoc } from "firebase/firestore";
+import {addDoc, collection, doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
 
 export type initProp = {
     device:deviceProp[]
@@ -49,6 +50,8 @@ export const editDevice = createAsyncThunk(
     }
 )
 
+
+
 const initialState:initProp = {
     device:[],
     isLoading:false,
@@ -62,18 +65,11 @@ export const deviceSlice = createSlice({
         getDevices:(state,action)=>{
             state.device = action.payload
         },
-        filterConnect: (state, action) => {
-            return{
-                ...state,
-                device: state.device.filter((device) => 
-                      device.connect === (action.payload==='true'))
-                }
-            }
     },
     extraReducers:(builder)=>{
        
     }
 })
 
-export const { getDevices,filterConnect } = deviceSlice.actions;
+export const { getDevices } = deviceSlice.actions;
 export default deviceSlice.reducer

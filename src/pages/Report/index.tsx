@@ -151,7 +151,7 @@ const Report = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", height: "100vh" }}>
       <Content
         style={{
           margin: "24px 16px 0",

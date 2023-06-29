@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Layout, Form, Select, Button } from "antd";
 import "./addNumber.css";
+import AddNumberModal from "../../Components/Modal/AddNumberModal";
 
 const { Content } = Layout;
 const { Option } = Select;
 const AddNumber = () => {
-  const onFinish = (values: any) => {};
-
+  const [showModal, setShowModal] = useState(false);
+  const onFinish = (values: any) => {
+    setShowModal(true);
+  };
   return (
     <Content
       style={{
@@ -39,6 +42,7 @@ const AddNumber = () => {
             name="select_service"
             style={{ width: "100%" }}
             className="add-number"
+            rules={[{ required: true, message: "Vui lòng chọn dịch vụ" }]}
           >
             <Select
               placeholder="Chọn dịch vụ"
@@ -71,6 +75,7 @@ const AddNumber = () => {
             </Button>
           </Form.Item>
         </Form>
+        <AddNumberModal showModal={showModal} setShowModal={setShowModal} />
       </div>
     </Content>
   );

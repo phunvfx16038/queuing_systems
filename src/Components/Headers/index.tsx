@@ -9,20 +9,20 @@ import { useAppSelector } from "../../app/store";
 const { Header } = Layout;
 
 const Headers = () => {
-  const userLogin = useAppSelector((state) => state.user.user);
+  // const userLogin = useAppSelector((state) => state.user.user);
   return (
     <Header style={{ backgroundColor: "#EAEAEC" }} className="header">
-      {/* <BreadCrumb /> */}
+      <BreadCrumb />
       <div className="wrapper-avatar">
         <Badge className="bell">
           <FaBell className="bell-icon" />
         </Badge>
         <div className="avatar-img">
-          <img src={userLogin.photoUrl || avatar} alt="avatar" />
+          <img src={avatar} alt="avatar" />
         </div>
         <div className="name">
           <span>Xin chào</span>
-          <span>{userLogin.displayName || "Lê Quỳnh Ái Vân"}</span>
+          <span> Lê Quỳnh Ái Vân</span>
         </div>
       </div>
     </Header>

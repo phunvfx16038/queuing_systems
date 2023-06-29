@@ -4,7 +4,7 @@ import { FaPen } from "react-icons/fa";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const { Content } = Layout;
 const { Search } = Input;
 const { RangePicker } = DatePicker;
@@ -45,6 +45,9 @@ const dataSource = [
 ];
 
 const DetailService = () => {
+  const location = useLocation();
+  const serviceDetail = location.state.record;
+
   const columns: ColumnsType<tableProp> = [
     {
       title: "Số thứ tự",
@@ -56,12 +59,12 @@ const DetailService = () => {
       dataIndex: "state",
       key: "state",
       render: (state) =>
-        state === "Đã hoàn thành" ? (
+        state === "completed" ? (
           <div style={{ display: "flex", alignItems: "center" }}>
             <div className="circle active"></div>
             <div>Đã hoàn thành</div>
           </div>
-        ) : state === "Đã thực hiện" ? (
+        ) : state === "worked" ? (
           <div style={{ display: "flex", alignItems: "center" }}>
             <div className="circle working"></div>
             <div>Đã thực hiện</div>
@@ -108,15 +111,15 @@ const DetailService = () => {
           <h3>Thông tin dịch vụ</h3>
           <div className="wrap-detail">
             <label>Mã dịch vụ:</label>
-            <span>Kio_32</span>
+            <span>{serviceDetail.service_code}</span>
           </div>
           <div className="wrap-detail">
             <label>Tên dịch vụ:</label>
-            <span>Kiosk</span>
+            <span>{serviceDetail.service_name}</span>
           </div>
           <div className="wrap-detail">
             <label>Mô tả:</label>
-            <span>Chuyên các bệnh về tim</span>
+            <span>{serviceDetail.description}</span>
           </div>
           <h3>Quy tắc cấp số</h3>
           <div className="wrap-detail">
@@ -129,7 +132,7 @@ const DetailService = () => {
                 borderRadius: "5px",
               }}
             >
-              0001
+              {serviceDetail.autoCount ? serviceDetail.autoCountValue1 : 0}
             </span>
             <span>đến</span>
             <span
@@ -140,7 +143,7 @@ const DetailService = () => {
                 padding: "5px",
               }}
             >
-              9999
+              {serviceDetail.autoCount ? serviceDetail.autoCountValue2 : 0}
             </span>
           </div>
           <div className="wrap-detail" style={{ marginTop: "10px" }}>
@@ -153,7 +156,7 @@ const DetailService = () => {
                 marginLeft: "50px",
               }}
             >
-              0001
+              {serviceDetail.prefix ? serviceDetail.prefixValue : 0}
             </span>
           </div>
           <div className="wrap-detail">
