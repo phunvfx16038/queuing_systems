@@ -21,7 +21,6 @@ const AddService = () => {
   const [service_name, setServiceName] = useState("");
   const [description, setDescription] = useState("");
   const [autoCount, setAutoCount] = useState(false);
-  const [autoCountValue, setAutoCountValue] = useState(0);
   const [autoCountValue1, setAutoCountValue1] = useState(0);
   const [autoCountValue2, setAutoCountValue2] = useState(0);
   const [prefix, setPrefix] = useState(false);
@@ -48,23 +47,21 @@ const AddService = () => {
         ? "used"
         : "skip";
     if (autoCount) {
-      setAutoCountValue(autoCountValue1 + autoCountValue2);
-      newService = { ...values, active, autoCountValue, status };
+      newService = { ...values, active, status };
     } else {
-      setAutoCountValue(0);
       setAutoCountValue1(0);
       setAutoCountValue2(0);
-      newService = { ...values, active, autoCountValue, status };
+      newService = { ...values, active, status };
     }
 
     if (prefix === false) {
       setPrefixValue(0);
-      newService = { ...values, active, prefixValue, autoCountValue, status };
+      newService = { ...values, active, prefixValue, status };
     }
 
     if (surfix === false) {
       setSurfixValue(0);
-      newService = { ...values, active, surfixValue, autoCountValue, status };
+      newService = { ...values, active, surfixValue, status };
     }
 
     dispatch(addService(newService));
@@ -99,7 +96,9 @@ const AddService = () => {
               <Form.Item
                 name="service_code"
                 label="Mã dịch vụ"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập mã dịch vụ!" },
+                ]}
                 initialValue={service_code}
               >
                 <Input
@@ -110,7 +109,9 @@ const AddService = () => {
               <Form.Item
                 name="service_name"
                 label="Tên dịch vụ"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên dịch vụ!" },
+                ]}
               >
                 <Input
                   onChange={(e) => setServiceName(e.target.value)}

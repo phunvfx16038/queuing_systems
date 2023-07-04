@@ -1,5 +1,5 @@
 export type ProgressionType={
-    stt:number
+    stt:string
     customer_name:string
     service_name:string
     date:string

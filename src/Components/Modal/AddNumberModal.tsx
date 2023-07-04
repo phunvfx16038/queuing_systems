@@ -5,22 +5,26 @@ import "./addNumber.css";
 type addnumberModalType = {
   showModal: boolean;
   setShowModal: (value: boolean) => void;
+  stt:string
+  date:string
+  expire:string
+  serviceName:string
 };
 
-const AddNumberModal = ({ showModal, setShowModal }: addnumberModalType) => {
+const AddNumberModal = ({ showModal, setShowModal,date,expire,serviceName,stt }: addnumberModalType) => {
   return (
     <Modal
       title="Số thứ tự được cấp"
       open={showModal}
       onCancel={() => setShowModal(false)}
       footer={[
-        <p className="footer-text">Thời gian cấp: 09:20 11/10/2021</p>,
-        <p className="footer-text">Hạn sử dụng: 17:20 11/10/2021</p>,
+        <p className="footer-text">Thời gian cấp: {date}</p>,
+        <p className="footer-text">Hạn sử dụng: {expire}</p>,
       ]}
     >
-      <p className="number">202120</p>
+      <p className="number">{stt}</p>
       <p>
-        DV: Khám răng hàm mặt <span>(tại quầy số 1)</span>
+        DV: {serviceName} <span>(tại quầy số 1)</span>
       </p>
     </Modal>
   );

@@ -14,6 +14,7 @@ import { serviceProp } from "../../propTypes/serviceType";
 import { useAppDispatch } from "../../app/store";
 import { userType } from "../../dataTypes/userType";
 import { useLocation } from "react-router-dom";
+import { updateOtherUser } from "../../app/userSlice";
 
 const { Content } = Layout;
 
@@ -32,10 +33,6 @@ const EditAccount = () => {
 
   const dispatch = useAppDispatch();
 
-  // const [randomNumber0To7] = useState<number>(() =>
-  //   Math.floor(Math.random() * 7)
-  // );
-
   const handleChangeRole = (value: string) => {
     setRole(value);
   };
@@ -45,7 +42,8 @@ const EditAccount = () => {
   };
 
   const onFinish = (values: userType) => {
-    // dispatch(createNewUser(values));
+    console.log(values);
+    dispatch(updateOtherUser({ user: values, id: editAccountData.id }));
   };
 
   return (
@@ -120,9 +118,9 @@ const EditAccount = () => {
                   style={{ width: "100%" }}
                   options={[
                     { value: "all", label: "Tất cả" },
-                    { value: "accountant", label: "Kế toán" },
-                    { value: "manager", label: "Quản lý" },
-                    { value: "admin", label: "Admin" },
+                    { value: "Kế toán", label: "Kế toán" },
+                    { value: "Quản lý", label: "Quản lý" },
+                    { value: "Admin", label: "Admin" },
                   ]}
                   value={role}
                   onChange={handleChangeRole}
@@ -157,7 +155,19 @@ const EditAccount = () => {
               <Form.Item
                 name="retype"
                 label="Nhập lại mật khẩu"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập lại mật khẩu!" },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue("password") === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error("Mật khẩu không trùng khớp!")
+                      );
+                    },
+                  }),
+                ]}
                 initialValue={reTypepassword}
               >
                 <Input
@@ -168,7 +178,9 @@ const EditAccount = () => {
               <Form.Item
                 name="active"
                 label="Tình trạng"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng chọn trạng thái!" },
+                ]}
                 initialValue={active}
               >
                 <Select
@@ -204,7 +216,7 @@ const EditAccount = () => {
             htmlType="submit"
             className="login-form-button"
           >
-            Thêm
+            Cập nhật
           </Button>
         </Form.Item>
       </Form>

@@ -4,13 +4,15 @@ import { TypedUseSelectorHook, useDispatch,useSelector } from 'react-redux';
 import deviceSlice from './deviceSlice';
 import serviceSlice from './serviceSlice';
 import roleSlice from './roleSlice';
+import progressionSlice from './progressionSlice';
 
 export const store = configureStore({
   reducer: {
     user:userSlice,
     devices:deviceSlice,
     service:serviceSlice,
-    roleManage:roleSlice
+    roleManage:roleSlice,
+    progression:progressionSlice
   },
 })
 

@@ -45,7 +45,6 @@ export const editService = createAsyncThunk(
         try{
             const getService = doc(db,`services/${editData.id}`)
             const res = await setDoc(getService,editData.editData,{merge:true})
-            console.log(res)
         }catch(err){
             console.log(err)
         }

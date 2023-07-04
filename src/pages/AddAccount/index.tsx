@@ -101,9 +101,9 @@ const AddAccount = () => {
                   style={{ width: "100%" }}
                   options={[
                     { value: "all", label: "Tất cả" },
-                    { value: "accountant", label: "Kế toán" },
-                    { value: "manager", label: "Quản lý" },
-                    { value: "admin", label: "Admin" },
+                    { value: "Kế toán", label: "Kế toán" },
+                    { value: "Quản lý", label: "Quản lý" },
+                    { value: "Admin", label: "Admin" },
                   ]}
                   value={role}
                   onChange={handleChangeRole}
@@ -136,7 +136,19 @@ const AddAccount = () => {
               <Form.Item
                 name="retype"
                 label="Nhập lại mật khẩu"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập lại mật khẩu!" },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue("password") === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error("Mật khẩu không trùng khớp!")
+                      );
+                    },
+                  }),
+                ]}
               >
                 <Input
                   value={password}
@@ -146,7 +158,9 @@ const AddAccount = () => {
               <Form.Item
                 name="active"
                 label="Tình trạng"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng chọn trạng thái!" },
+                ]}
               >
                 <Select
                   placeholder="Tất cả"

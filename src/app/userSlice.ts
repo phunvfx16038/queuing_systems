@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { app, auth } from "../firebase/firebase";
 import { userType } from "../dataTypes/userType";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { addDoc, collection, doc, getFirestore, setDoc } from "firebase/firestore";
+import axios from "axios";
 
 export type initProp = {
     user:userType[]
@@ -11,21 +12,27 @@ export type initProp = {
     isError:undefined|string
 }
 
-type dataLoginProp = {
+type dataLoginType = {
     email:string,
     password:string
+}
+
+type editUseType = {
+    user:userType,
+    id:string
 }
 
 export const db = getFirestore(app)
 export const userCollection = collection(db,'users')
 
-const login = (data:dataLoginProp) =>{
+const login = (data:dataLoginType) =>{
    return signInWithEmailAndPassword(auth,data.email,data.password)
 }
 
-export const loginUser = createAsyncThunk<userType,dataLoginProp,{ rejectValue: string }>(
+const baseUrl = 'http://localhost:8080'
+export const loginUser = createAsyncThunk<userType,dataLoginType,{ rejectValue: string }>(
     'user/loginUser',
-    async(data:dataLoginProp,thunkApi)=>{
+    async(data:dataLoginType,thunkApi)=>{
         try{
             let userData:userType = {
                 uid:'',
@@ -65,19 +72,36 @@ const addUserToFireBase = async (data:userType,id:string)=>{
 export const createNewUser = createAsyncThunk(
     'user/createNewUser',
     async(data:userType)=>{
-      const res = createUserWithEmailAndPassword(auth, data.email, data.password)
-        .then((userCredential) => {
-            // Signed in
-            addUserToFireBase(data,userCredential.user.uid) 
-            return userCredential.user
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // ..
-          });
+        try{
+            const res = await createUserWithEmailAndPassword(auth, data.email, data.password)
+            await setDoc(doc(db,'users', res.user.uid),{
+                ...data
+            })
+        }catch(err){
+            console.log(err)
+        }
     }
 )
+
+export const updateOtherUser = createAsyncThunk(
+    'user/updateOtherUser',
+    async(data:editUseType)=>{
+        const getRole = doc(db,`users/${data.id}`)
+        const updateToCloudFireStore = await setDoc(getRole,data.user,{merge:true})
+        const headers = {
+            // token: data.token,
+        };
+        const {email,password} = data.user
+        const EmailandPAsswordUserData = {email,password}
+          const res = await axios.post(
+            `${baseUrl}/user/update/${data.id}`,
+            EmailandPAsswordUserData,
+            { headers }
+          );
+          return res.data;
+    }
+)
+
 
 const initialState:initProp = {
     login:{
@@ -95,8 +119,6 @@ const initialState:initProp = {
     isLoading:false,
     isError:undefined
 }
-
-console.log(auth.currentUser)
 
 export const userSlice = createSlice({
     name:'user',

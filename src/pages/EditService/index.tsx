@@ -25,8 +25,7 @@ const EditService = () => {
   const [serviceCode, setServiceCode] = useState(editData.service_code);
   const [serviceName, setServiceName] = useState(editData.service_name);
   const [description, setDescription] = useState(editData.description);
-  const [autoCount, setAutoCount] = useState(editData.autoCount);
-  const [autoCountValue, setAutoCountValue] = useState(editData.autoCountValue);
+  const [autoCount, setAutoCount] = useState(editData.countAuto);
   const [autoCountValue1, setAutoCountValue1] = useState(
     editData.autoCountValue1
   );
@@ -44,12 +43,12 @@ const EditService = () => {
     console.log(values);
     if (prefix === false) {
       setPrefixValue(0);
-      newService = { ...values, prefixValue, autoCountValue };
+      newService = { ...values, prefixValue };
     }
 
     if (surfix === false) {
       setSurfixValue(0);
-      newService = { ...values, surfixValue, autoCountValue };
+      newService = { ...values, surfixValue };
     }
 
     dispatch(editService({ id: editData.id, editData: newService }));
@@ -84,7 +83,9 @@ const EditService = () => {
               <Form.Item
                 name="serviceCode"
                 label="Mã dịch vụ"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập mã dịch vụ!" },
+                ]}
                 initialValue={serviceCode}
               >
                 <Input
@@ -95,7 +96,9 @@ const EditService = () => {
               <Form.Item
                 name="serviceName"
                 label="Tên dịch vụ"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên dịch vụ!" },
+                ]}
                 initialValue={serviceName}
               >
                 <Input
@@ -106,7 +109,7 @@ const EditService = () => {
             </Col>
             <Col span={12}>
               <Form.Item
-                name={["user", "introduction"]}
+                name="introduction"
                 label="Introduction"
                 initialValue={description}
               >
@@ -120,7 +123,7 @@ const EditService = () => {
             </Col>
             <div style={{ display: "flex", width: "100%" }}>
               <Form.Item
-                name="countAuto"
+                name="autoCount"
                 valuePropName="checked"
                 initialValue={autoCount}
               >
@@ -128,6 +131,7 @@ const EditService = () => {
                   onChange={(e) => setAutoCount(e.target.checked)}
                   checked={autoCount}
                   defaultChecked={autoCount}
+                  value={autoCount}
                 >
                   Tăng tự động từ
                 </Checkbox>

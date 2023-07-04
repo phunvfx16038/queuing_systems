@@ -8,190 +8,100 @@ import { serviceProp } from "../../propTypes/serviceType";
 import dayjs from "dayjs";
 import { ProgressionType } from "../../propTypes/progressionType";
 import "./progression.css";
+import {
+  getProgressions,
+  progressionCollection,
+} from "../../app/progressionSlice";
+import { useAppDispatch, useAppSelector } from "../../app/store";
 
 const { Content } = Layout;
 const { Search } = Input;
-const dataSource = [
-  {
-    stt: 2011001,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "waiting",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011002,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "waiting",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011003,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "waiting",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011004,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "waiting",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011005,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "waiting",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011006,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "waiting",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011007,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "skip",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011008,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "used",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011009,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "skip",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011010,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "waiting",
-    supply: "Kiosk",
-  },
-  {
-    stt: 2011001,
-    customer_name: "Lê Huỳnh Ái VÂn",
-    service_name: "Khám tim mạch",
-    date: "14:35 07/11/2021",
-    expire_date: "14:35 12/11/2021",
-    state: "used",
-    supply: "Kiosk",
-  },
-];
 
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY/MM/DD";
-const Progression = () => {
-  //   useEffect(() => {
-  //     onSnapshot(deviceCollection, (snapshot) => {
-  //       let data = snapshot.docs.map((doc) => {
-  //         return {
-  //           id: doc.id,
-  //           ...doc.data(),
-  //         };
-  //       });
-  //       dispatch(getDevices(data));
-  //     });
-  //   }, [dispatch]);
-
-  const columns: ColumnsType<ProgressionType> = [
-    {
-      title: "STT",
-      dataIndex: "stt",
-      key: "stt",
-    },
-    {
-      title: "Tên khách hàng",
-      dataIndex: "customer_name",
-      key: "customer_name",
-    },
-    {
-      title: "Tên dịch vụ",
-      dataIndex: "service_name",
-      key: "service_name",
-    },
-    {
-      title: "Thời gian cấp",
-      dataIndex: "date",
-      key: "date",
-    },
-    {
-      title: "Hạn sử dụng",
-      dataIndex: "expire_date",
-      key: "expire_date",
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "state",
-      key: "state",
-      render: (state) =>
-        state === "waiting" ? (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle working"></div>
-            <div>Đang chờ</div>
-          </div>
-        ) : state === "used" ? (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle absent"></div>
-            <div>Đã sử dụng</div>
-          </div>
-        ) : (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle stop"></div>
-            <div>Bỏ qua</div>
-          </div>
-        ),
-    },
-    {
-      title: "Nguồn cấp",
-      dataIndex: "supply",
-      key: "supply",
-    },
-    {
-      title: "empty",
-      dataIndex: "detail",
-      key: "detail",
-      render: (_, record) => (
-        <Link to="/capso/chitietcapso" state={{ record }}>
-          Chi tiết
-        </Link>
+const columns: ColumnsType<ProgressionType> = [
+  {
+    title: "STT",
+    dataIndex: "stt",
+    key: "stt",
+  },
+  {
+    title: "Tên khách hàng",
+    dataIndex: "customer_name",
+    key: "customer_name",
+  },
+  {
+    title: "Tên dịch vụ",
+    dataIndex: "service_name",
+    key: "service_name",
+  },
+  {
+    title: "Thời gian cấp",
+    dataIndex: "date",
+    key: "date",
+  },
+  {
+    title: "Hạn sử dụng",
+    dataIndex: "expire_date",
+    key: "expire_date",
+  },
+  {
+    title: "Trạng thái",
+    dataIndex: "state",
+    key: "state",
+    render: (state) =>
+      state === "waiting" ? (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="circle working"></div>
+          <div>Đang chờ</div>
+        </div>
+      ) : state === "used" ? (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="circle absent"></div>
+          <div>Đã sử dụng</div>
+        </div>
+      ) : (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="circle stop"></div>
+          <div>Bỏ qua</div>
+        </div>
       ),
-    },
-  ];
+  },
+  {
+    title: "Nguồn cấp",
+    dataIndex: "supply",
+    key: "supply",
+  },
+  {
+    title: "empty",
+    dataIndex: "detail",
+    key: "detail",
+    render: (_, record) => (
+      <Link to="/capso/chitietcapso" state={{ record }}>
+        Chi tiết
+      </Link>
+    ),
+  },
+];
+const Progression = () => {
+  const dispatch = useAppDispatch();
+  const progressionData = useAppSelector(
+    (state) => state.progression.progression
+  );
+  const [progressionLists, setProgressionLists] = useState(progressionData);
+  useEffect(() => {
+    onSnapshot(progressionCollection, (snapshot) => {
+      let data: any = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      dispatch(getProgressions(data));
+      setProgressionLists(data);
+    });
+  }, [dispatch]);
+
   const navigate = useNavigate();
   const [actionSelect, setActionSelect] = useState<string>("");
   const [search, setSearch] = useState("");
@@ -200,7 +110,38 @@ const Progression = () => {
   };
 
   const onSearch = (value: string) => {
-    setSearch(value);
+    // setSearch(value);
+    // const searchRoleData = roleManageData.filter((role) => {
+    //   return (
+    //     role.description.toLowerCase().includes(value.toLowerCase()) ||
+    //     role.role_name.toLowerCase().includes(value.toLowerCase())
+    //   );
+    // });
+    // setRoleManage(searchRoleData);
+  };
+
+  const handleChangeActive = (value: string) => {
+    // setActiveSelect(value);
+    // if (value === "all") {
+    //   setDevicesData(allDevices);
+    // } else {
+    //   const filterData = allDevices.filter((device) => {
+    //     return device.active === (value === "true");
+    //   });
+    //   setDevicesData(filterData);
+    // }
+  };
+
+  const handleChangeConnect = (value: string) => {
+    // setConnectSelect(value);
+    // if (value === "all") {
+    //   setDevicesData(allDevices);
+    // } else {
+    //   const filterData = allDevices.filter((device) => {
+    //     return device.connect === (value === "true");
+    //   });
+    //   setDevicesData(filterData);
+    // }
   };
 
   const handleAddNumber = () => {
@@ -287,7 +228,7 @@ const Progression = () => {
         </div>
         <Table
           columns={columns}
-          dataSource={dataSource}
+          dataSource={progressionLists}
           style={{ marginTop: "15px" }}
         />
       </Content>

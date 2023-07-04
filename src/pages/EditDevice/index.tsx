@@ -65,7 +65,9 @@ const EditDevice = () => {
               <Form.Item
                 name="code"
                 label="Mã thiết bị"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập mã thiết bị!" },
+                ]}
                 initialValue={editData.code}
               >
                 <Input onChange={(e) => setCode(e.target.value)} value={code} />
@@ -73,7 +75,9 @@ const EditDevice = () => {
               <Form.Item
                 name="name"
                 label="Tên thiết bị"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên thiết bị!" },
+                ]}
                 initialValue={editData.name}
               >
                 <Input onChange={(e) => setName(e.target.value)} value={name} />
@@ -81,7 +85,9 @@ const EditDevice = () => {
               <Form.Item
                 name="ip_address"
                 label="Địa chỉ IP"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập địa chỉ IP!" },
+                ]}
                 initialValue={editData.ip_address}
               >
                 <Input
@@ -94,7 +100,9 @@ const EditDevice = () => {
               <Form.Item
                 name="type"
                 label="Loại thiết bị"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng chọn loại thiết bị!" },
+                ]}
                 initialValue={editData.type}
               >
                 <Select
@@ -109,7 +117,9 @@ const EditDevice = () => {
               <Form.Item
                 name="login_name"
                 label="Tên đăng nhập"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+                ]}
                 initialValue={editData.login_name}
               >
                 <Input
@@ -120,7 +130,7 @@ const EditDevice = () => {
               <Form.Item
                 name="password"
                 label="Mật khẩu"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
                 initialValue={editData.password}
               >
                 <Input
@@ -132,7 +142,7 @@ const EditDevice = () => {
             <Form.Item
               name="using_service"
               label="Dịch vụ sử dụng"
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: "Vui lòng chọn dịch vụ!" }]}
               style={{ width: "100%" }}
               initialValue={editData.using_service}
             >

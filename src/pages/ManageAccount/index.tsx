@@ -37,14 +37,7 @@ const columns: ColumnsType<userType> = [
     title: "Vai trò",
     dataIndex: "role",
     key: "role",
-    render: (state) =>
-      state === "admin" ? (
-        <div>Admin</div>
-      ) : state === "manager" ? (
-        <div>Quản lý</div>
-      ) : (
-        <div>Kế toán</div>
-      ),
+    
   },
   {
     title: "Trạng thái hoạt động",

@@ -7,9 +7,15 @@ import { roleProp } from "../../propTypes/roleType";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { getRoleManage, roleManageCollection } from "../../app/roleSlice";
 import { onSnapshot } from "firebase/firestore";
+import { userType } from "../../dataTypes/userType";
+import { configureStore } from "@reduxjs/toolkit";
 const { Content } = Layout;
 const { Search } = Input;
-
+type manageRoleType = {
+  role_name: string;
+  roleNumber: number;
+  description: string;
+};
 const columns: ColumnsType<roleProp> = [
   {
     title: "Tên vai trò",
@@ -44,37 +50,45 @@ const Managerole = () => {
   const roleManageData = useAppSelector((state) => state.roleManage.roleManage);
   const userData = useAppSelector((state) => state.user.user);
 
-  const data = roleManageData.map((role: any) => {
-    const usersInRole = userData.reduce(
-      (count: number, user: { role: any }) => {
-        if (user.role === role.roleName) {
-          count++;
-        }
-        return count;
-      },
-      0
-    );
-
-    return {
-      ...role,
-      usersNumber: usersInRole,
-    };
-  });
-
-  const [roleManage, setRoleManage] = useState(data);
+  const [roleManage, setRoleManage] = useState<roleProp[]>(roleManageData);
   const [search, setSearch] = useState("");
 
+  const customManageRoleData = () => {
+    const mangegeroleCustom = roleManage.map((item) => {
+      // Object.values(
+      const custom = userData.reduce((a, user) => {
+        console.log(item);
+        const { role } = user;
+        a = { ...item, userNumber: 0 };
+        a.userNumber = a.userNumber + 1;
+        return a;
+      }, Object.create(null));
+      // );
+      return custom;
+    });
+
+    return mangegeroleCustom;
+  };
+
+  customManageRoleData();
+  console.log(customManageRoleData());
+
   useEffect(() => {
-    onSnapshot(roleManageCollection, (snapshot) => {
+    const unsub = onSnapshot(roleManageCollection, (snapshot) => {
       let data: any = snapshot.docs.map((doc) => {
         return {
           id: doc.id,
           ...doc.data(),
         };
       });
+
       dispatch(getRoleManage(data));
       setRoleManage(data);
     });
+
+    return () => {
+      unsub();
+    };
   }, [dispatch]);
 
   const onSearch = (value: string) => {

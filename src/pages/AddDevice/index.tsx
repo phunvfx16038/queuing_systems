@@ -91,21 +91,27 @@ const AddDevice = () => {
               <Form.Item
                 name="code"
                 label="Mã thiết bị"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập mã thiết bị!" },
+                ]}
               >
                 <Input onChange={(e) => setCode(e.target.value)} value={code} />
               </Form.Item>
               <Form.Item
                 name="name"
                 label="Tên thiết bị"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên thiết bị!" },
+                ]}
               >
                 <Input onChange={(e) => setName(e.target.value)} value={name} />
               </Form.Item>
               <Form.Item
                 name="ip_address"
                 label="Địa chỉ IP"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập địa chỉ IP!" },
+                ]}
               >
                 <Input
                   onChange={(e) => setIpAddress(e.target.value)}
@@ -117,7 +123,9 @@ const AddDevice = () => {
               <Form.Item
                 name="type"
                 label="Loại thiết bị"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng chọn loại thiết bị!" },
+                ]}
               >
                 <Select
                   placeholder="Chọn loại thiết bị"
@@ -132,14 +140,16 @@ const AddDevice = () => {
               <Form.Item
                 name="login_name"
                 label="Tên đăng nhập"
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+                ]}
               >
                 <Input onChange={(e) => setLogInName} value={logInName} />
               </Form.Item>
               <Form.Item
                 name="password"
                 label="Mật khẩu"
-                rules={[{ required: true }]}
+                rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
               >
                 <Input
                   onChange={(e) => setPassword(e.target.value)}
@@ -150,7 +160,7 @@ const AddDevice = () => {
             <Form.Item
               name="using_service"
               label="Dịch vụ sử dụng"
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: "Vui lòng chọn dịch vụ!" }]}
               style={{ width: "100%" }}
             >
               <Select
