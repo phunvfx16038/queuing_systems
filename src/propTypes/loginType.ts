@@ -1,4 +1,4 @@
 export type loginProp = {
-    email:string,
+    userName:string,
     password:string
 }

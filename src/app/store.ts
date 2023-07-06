@@ -5,9 +5,11 @@ import deviceSlice from './deviceSlice';
 import serviceSlice from './serviceSlice';
 import roleSlice from './roleSlice';
 import progressionSlice from './progressionSlice';
+import authSlice from './authSlice';
 
 export const store = configureStore({
   reducer: {
+    auth:authSlice,
     user:userSlice,
     devices:deviceSlice,
     service:serviceSlice,

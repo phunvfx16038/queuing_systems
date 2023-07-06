@@ -29,6 +29,7 @@ import type { Dayjs } from "dayjs";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./dashboard.css";
+import Main from "../../Components/MainLayout";
 
 ChartJS.register(
   CategoryScale,
@@ -185,179 +186,181 @@ const DashBoard = () => {
     setSelected(value);
   };
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Content
-        style={{
-          margin: "24px 16px 0",
-          backgroundColor: "#EAEAEC",
-          width: "66.66%",
-        }}
-      >
-        <h3>Biểu đồ cấp số</h3>
-        <Row gutter={[16, 16]}>
-          {cardData.map((card, index) => (
-            <Col span={6} key={index}>
-              <CardLevel
-                icon1={card.icon1}
-                icon2={card.icon2}
-                percent={card.percent}
-                title={card.title}
-                value={card.value}
-                type={card.type}
+    <Main>
+      <div style={{ display: "flex", height: "100vh" }}>
+        <Content
+          style={{
+            margin: "24px 16px 0",
+            backgroundColor: "#EAEAEC",
+            width: "66.66%",
+          }}
+        >
+          <h3>Biểu đồ cấp số</h3>
+          <Row gutter={[16, 16]}>
+            {cardData.map((card, index) => (
+              <Col span={6} key={index}>
+                <CardLevel
+                  icon1={card.icon1}
+                  icon2={card.icon2}
+                  percent={card.percent}
+                  title={card.title}
+                  value={card.value}
+                  type={card.type}
+                />
+              </Col>
+            ))}
+          </Row>
+          <div className="wrap-chart">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: "20px 0",
+              }}
+            >
+              <h4>Bảng thống kê theo {selected}</h4>
+              <div>
+                <span style={{ marginRight: "15px" }}>Xem theo</span>
+                <Select
+                  defaultValue="Tháng"
+                  style={{ width: 120 }}
+                  onChange={handleChange}
+                  options={[
+                    { value: "ngày", label: "Ngày" },
+                    { value: "tuần", label: "Tuần" },
+                    { value: "tháng", label: "Tháng" },
+                  ]}
+                />
+              </div>
+            </div>
+            <Line options={chartOption} data={chartData} />
+          </div>
+        </Content>
+        <div
+          style={{
+            width: "33.33%",
+            padding: "16px 10px",
+            backgroundColor: "#FFFFFF",
+            boxShadow: "2px 2px 15px rgba(70, 64, 67, 0.1)",
+          }}
+        >
+          <h3>Tổng quan</h3>
+          <div className="overview-card">
+            <div className="over-view-progress">
+              <Progress
+                type="circle"
+                percent={90}
+                strokeColor={{ "100%": "#FF7506" }}
+                size={50}
               />
-            </Col>
-          ))}
-        </Row>
-        <div className="wrap-chart">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              margin: "20px 0",
-            }}
-          >
-            <h4>Bảng thống kê theo {selected}</h4>
-            <div>
-              <span style={{ marginRight: "15px" }}>Xem theo</span>
-              <Select
-                defaultValue="Tháng"
-                style={{ width: 120 }}
-                onChange={handleChange}
-                options={[
-                  { value: "ngày", label: "Ngày" },
-                  { value: "tuần", label: "Tuần" },
-                  { value: "tháng", label: "Tháng" },
-                ]}
+              <div className="overview-value">
+                <p>4221</p>
+                <span className="overview-icon">
+                  <CiMonitor style={{ marginRight: "5px" }} />
+                  Thiết bị
+                </span>
+              </div>
+            </div>
+            <div className="overview-status">
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div className="circle"></div>
+                <div className="status">
+                  <p>Đang hoạt động</p>
+                  <span>3799</span>
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div className="circle"></div>
+                <div className="status">
+                  <p>Ngưng hoạt động</p>
+                  <span>422</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="overview-card">
+            <div className="over-view-progress">
+              <Progress
+                type="circle"
+                percent={90}
+                strokeColor={{ "100%": "#FF7506" }}
+                size={50}
               />
+              <div className="overview-value">
+                <p>4221</p>
+                <span className="overview-icon">
+                  <CiGrid42 style={{ marginRight: "5px" }} />
+                  Dịch vụ
+                </span>
+              </div>
+            </div>
+            <div className="overview-status">
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div className="circle"></div>
+                <div className="status">
+                  <p>Đang hoạt động</p>
+                  <span>210</span>
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div className="circle"></div>
+                <div className="status">
+                  <p>Ngưng hoạt động</p>
+                  <span>66</span>
+                </div>
+              </div>
             </div>
           </div>
-          <Line options={chartOption} data={chartData} />
-        </div>
-      </Content>
-      <div
-        style={{
-          width: "33.33%",
-          padding: "16px 10px",
-          backgroundColor: "#FFFFFF",
-          boxShadow: "2px 2px 15px rgba(70, 64, 67, 0.1)",
-        }}
-      >
-        <h3>Tổng quan</h3>
-        <div className="overview-card">
-          <div className="over-view-progress">
-            <Progress
-              type="circle"
-              percent={90}
-              strokeColor={{ "100%": "#FF7506" }}
-              size={50}
+          <div className="overview-card">
+            <div className="over-view-progress">
+              <Progress
+                type="circle"
+                percent={90}
+                strokeColor={{ "100%": "#FF7506" }}
+                size={50}
+              />
+              <div className="overview-value">
+                <p>4221</p>
+                <span className="overview-icon">
+                  <CiReceipt style={{ marginRight: "5px" }} />
+                  Cấp số
+                </span>
+              </div>
+            </div>
+            <div className="overview-status">
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div className="circle"></div>
+                <div className="status">
+                  <p>Đang chờ</p>
+                  <span>3721</span>
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div className="circle"></div>
+                <div className="status">
+                  <p>Đã sử dụng</p>
+                  <span>468</span>
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div className="circle"></div>
+                <div className="status">
+                  <p>Bỏ qua</p>
+                  <span>32</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={wrapperStyle}>
+            <Calendar
+              calendarType="ISO 8601"
+              locale="en-EN"
+              defaultValue={new Date()}
             />
-            <div className="overview-value">
-              <p>4221</p>
-              <span className="overview-icon">
-                <CiMonitor style={{ marginRight: "5px" }} />
-                Thiết bị
-              </span>
-            </div>
           </div>
-          <div className="overview-status">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="circle"></div>
-              <div className="status">
-                <p>Đang hoạt động</p>
-                <span>3799</span>
-              </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="circle"></div>
-              <div className="status">
-                <p>Ngưng hoạt động</p>
-                <span>422</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="overview-card">
-          <div className="over-view-progress">
-            <Progress
-              type="circle"
-              percent={90}
-              strokeColor={{ "100%": "#FF7506" }}
-              size={50}
-            />
-            <div className="overview-value">
-              <p>4221</p>
-              <span className="overview-icon">
-                <CiGrid42 style={{ marginRight: "5px" }} />
-                Dịch vụ
-              </span>
-            </div>
-          </div>
-          <div className="overview-status">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="circle"></div>
-              <div className="status">
-                <p>Đang hoạt động</p>
-                <span>210</span>
-              </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="circle"></div>
-              <div className="status">
-                <p>Ngưng hoạt động</p>
-                <span>66</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="overview-card">
-          <div className="over-view-progress">
-            <Progress
-              type="circle"
-              percent={90}
-              strokeColor={{ "100%": "#FF7506" }}
-              size={50}
-            />
-            <div className="overview-value">
-              <p>4221</p>
-              <span className="overview-icon">
-                <CiReceipt style={{ marginRight: "5px" }} />
-                Cấp số
-              </span>
-            </div>
-          </div>
-          <div className="overview-status">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="circle"></div>
-              <div className="status">
-                <p>Đang chờ</p>
-                <span>3721</span>
-              </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="circle"></div>
-              <div className="status">
-                <p>Đã sử dụng</p>
-                <span>468</span>
-              </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="circle"></div>
-              <div className="status">
-                <p>Bỏ qua</p>
-                <span>32</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style={wrapperStyle}>
-          <Calendar
-            calendarType="ISO 8601"
-            locale="en-EN"
-            defaultValue={new Date()}
-          />
         </div>
       </div>
-    </div>
+    </Main>
   );
 };
 

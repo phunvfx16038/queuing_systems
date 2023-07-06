@@ -6,4 +6,6 @@ export type ProgressionType={
     expire_date:string
     state:string
     supply:string
+    phone?:string
+    email?:string
 }

@@ -4,14 +4,16 @@ import { Avatar, Col, Layout, Row, Form, Input } from "antd";
 import avatar from "../../assets/images/avatar.png";
 import "./userProfile.css";
 import { useAppSelector } from "../../app/store";
+import Main from "../../Components/MainLayout";
 
 const { Content } = Layout;
 
 const UserProfile = () => {
   // const userProfile = useAppSelector((state) => state.user.user);
   return (
-    <Content style={{ margin: "24px 16px 0", backgroundColor: "#EAEAEC" }}>
-      {/* <div
+    <Main>
+      <Content style={{ margin: "24px 16px 0", backgroundColor: "#EAEAEC" }}>
+        {/* <div
         style={{
           padding: 24,
           minHeight: 360,
@@ -68,7 +70,8 @@ const UserProfile = () => {
           </Col>
         </Row>
       </div> */}
-    </Content>
+      </Content>
+    </Main>
   );
 };
 

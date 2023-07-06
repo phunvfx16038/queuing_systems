@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Input, Table, DatePicker } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
@@ -6,186 +6,139 @@ import { AiFillPlusSquare } from "react-icons/ai";
 import dayjs from "dayjs";
 import { reportType } from "../../propTypes/reportType";
 import "./report.css";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import { onSnapshot } from "firebase/firestore";
+import {
+  getProgressions,
+  progressionCollection,
+} from "../../app/progressionSlice";
+import { ProgressionType } from "../../propTypes/progressionType";
+import { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
+import Main from "../../Components/MainLayout";
 
 const { Content } = Layout;
 const { Search } = Input;
-const dataSource = [
+
+const columns: ColumnsType<ProgressionType> = [
   {
-    stt: 2010001,
-    service_name: "Khám tim mạch",
-    date: "07:20 07/10/2021",
-    status: "waiting",
-    supply: "kiosk",
+    title: "Số thứ tự ",
+    dataIndex: "stt",
+    key: "stt",
   },
   {
-    stt: 2010002,
-    service_name: "Khám hô hấp",
-    date: "09:20 07/10/2021",
-    status: "uesed",
-    supply: "Hệ thống",
+    title: "Tên dịch vụ",
+    dataIndex: "supply",
+    key: "supply",
   },
   {
-    stt: 2010003,
-    service_name: "Khám sản - phụ khoa",
-    date: "05:20 10/10/2021",
-    status: "skip",
-    supply: "kiosk",
+    title: "Thời gian cấp",
+    dataIndex: "date",
+    key: "date",
   },
   {
-    stt: 2010001,
-    service_name: "Khám tim mạch",
-    date: "07:20 07/10/2021",
-    status: "waiting",
-    supply: "kiosk",
+    title: "Tình trạng",
+    dataIndex: "state",
+    key: "state",
+    render: (state) =>
+      state === "waiting" ? (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="circle working"></div>
+          <div>Đang chờ</div>
+        </div>
+      ) : state === "used" ? (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="circle absent"></div>
+          <div>Đã sử dụng</div>
+        </div>
+      ) : (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div className="circle stop"></div>
+          <div>Bỏ qua</div>
+        </div>
+      ),
   },
   {
-    stt: 2010001,
-    service_name: "Khám tim mạch",
-    date: "07:20 07/10/2021",
-    status: "waiting",
-    supply: "kiosk",
-  },
-  {
-    stt: 2010001,
-    service_name: "Khám tim mạch",
-    date: "07:20 07/10/2021",
-    status: "waiting",
-    supply: "kiosk",
-  },
-  {
-    stt: 2010001,
-    service_name: "Khám tim mạch",
-    date: "07:20 07/10/2021",
-    status: "waiting",
-    supply: "kiosk",
+    title: "Nguồn cấp",
+    dataIndex: "service_name",
+    key: "service_name",
   },
 ];
-
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY/MM/DD";
 const Report = () => {
-  //   useEffect(() => {
-  //     onSnapshot(deviceCollection, (snapshot) => {
-  //       let data = snapshot.docs.map((doc) => {
-  //         return {
-  //           id: doc.id,
-  //           ...doc.data(),
-  //         };
-  //       });
-  //       dispatch(getDevices(data));
-  //     });
-  //   }, [dispatch]);
+  const dispatch = useAppDispatch();
+  const progressionData = useAppSelector(
+    (state) => state.progression.progression
+  );
+  const [reportLists, setReportLists] = useState(progressionData);
+  useEffect(() => {
+    onSnapshot(progressionCollection, (snapshot) => {
+      let data: any = snapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      });
+      dispatch(getProgressions(data));
+      setReportLists(data);
+    });
+  }, [dispatch]);
 
-  const columns: ColumnsType<reportType> = [
-    {
-      title: "Số thứ tự ",
-      dataIndex: "stt",
-      key: "stt",
-      filters: [
-        {
-          text: "2001001",
-          value: 2001001,
-        },
-        {
-          text: "2001002",
-          value: 2001002,
-        },
-        {
-          text: "2001003",
-          value: 2001003,
-        },
-      ],
-      filterMode: "tree",
-      filterSearch: true,
-      width: "30%",
-    },
-    {
-      title: "Tên dịch vụ",
-      dataIndex: "service_name",
-      key: "service_name",
-    },
-    {
-      title: "Thời gian cấp",
-      dataIndex: "date",
-      key: "date",
-    },
-    {
-      title: "Tình trạng",
-      dataIndex: "status",
-      key: "status",
-      render: (state) =>
-        state === "waiting" ? (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle working"></div>
-            <div>Đang chờ</div>
-          </div>
-        ) : state === "used" ? (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle absent"></div>
-            <div>Đã sử dụng</div>
-          </div>
-        ) : (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="circle stop"></div>
-            <div>Bỏ qua</div>
-          </div>
-        ),
-    },
-    {
-      title: "Nguồn cấp",
-      dataIndex: "supply",
-      key: "supply",
-    },
-  ];
-  const navigate = useNavigate();
+  const handleChangeDate = (
+    value: DatePickerProps["value"] | RangePickerProps["value"],
+    dateString: [string, string] | string
+  ) => {
+    const startDateFormat = dayjs(dateString[0]).format("DD/MM/YYYY");
+    const endDateFormat = dayjs(dateString[1]).format("DD/MM/YYYY");
+    if (dateString[0] === "" && dateString[1] === "") {
+      setReportLists(progressionData);
+    } else {
+      const filterData = progressionData.filter((progression) => {
+        const dateFromData = progression.date.split(" ");
+        const expireDateFromData = progression.expire_date.split(" ");
+        return (
+          dateFromData[1].includes(startDateFormat) ||
+          expireDateFromData[1].includes(endDateFormat)
+        );
+      });
+      setReportLists(filterData);
+    }
+  };
 
   const handleExportFile = () => {};
 
-  const onChange: TableProps<reportType>["onChange"] = (
-    pagination,
-    filters,
-    sorter,
-    extra
-  ) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
-
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Content
-        style={{
-          margin: "24px 16px 0",
-          backgroundColor: "#EAEAEC",
-        }}
-      >
-        <div className="wrap-device">
-          <div className="wrap-select">
-            <div className="select">
-              <label>Chọn thời gian</label>
-              <RangePicker
-                defaultValue={[
-                  dayjs("2015/01/01", dateFormat),
-                  dayjs("2015/01/01", dateFormat),
-                ]}
-                format={dateFormat}
-              />
+    <Main>
+      <div style={{ display: "flex", height: "100vh" }}>
+        <Content
+          style={{
+            margin: "24px 16px 0",
+            backgroundColor: "#EAEAEC",
+          }}
+        >
+          <div className="wrap-device">
+            <div className="wrap-select">
+              <div className="select">
+                <label>Chọn thời gian</label>
+                <RangePicker format={dateFormat} onChange={handleChangeDate} />
+              </div>
             </div>
           </div>
+          <Table
+            columns={columns}
+            dataSource={reportLists}
+            style={{ marginTop: "15px" }}
+            className="report"
+          />
+        </Content>
+        <div className="add-device">
+          <div className="icon-add-device" onClick={handleExportFile}>
+            <AiFillPlusSquare />
+          </div>
+          <div className="text-add-device">Tải về</div>
         </div>
-        <Table
-          columns={columns}
-          dataSource={dataSource}
-          style={{ marginTop: "15px" }}
-          className="report"
-        />
-      </Content>
-      <div className="add-device">
-        <div className="icon-add-device" onClick={handleExportFile}>
-          <AiFillPlusSquare />
-        </div>
-        <div className="text-add-device">Tải về</div>
       </div>
-    </div>
+    </Main>
   );
 };
 

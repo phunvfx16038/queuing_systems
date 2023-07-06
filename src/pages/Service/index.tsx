@@ -9,6 +9,7 @@ import "./service.css";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { onSnapshot } from "firebase/firestore";
 import { getServices, serviceCollection } from "../../app/serviceSlice";
+import Main from "../../Components/MainLayout";
 const { Content } = Layout;
 const { Search } = Input;
 
@@ -131,59 +132,61 @@ const Service = () => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Content
-        style={{
-          margin: "24px 16px 0",
-          backgroundColor: "#EAEAEC",
-        }}
-      >
-        <h3>Danh sách dịch vụ</h3>
-        <div className="wrap-device">
-          <div className="wrap-select">
-            <div className="select">
-              <label>Trạng thái hoạt động</label>
-              <Select
-                placeholder="Tất cả"
-                style={{ width: "100%" }}
-                onChange={handleChangeActive}
-                value={activeSelect}
-                options={[
-                  { value: "all", label: "Tất cả" },
-                  { value: "true", label: "Hoạt động" },
-                  { value: "false", label: "Ngừng hoạt động" },
-                ]}
+    <Main>
+      <div style={{ display: "flex", height: "100vh" }}>
+        <Content
+          style={{
+            margin: "24px 16px 0",
+            backgroundColor: "#EAEAEC",
+          }}
+        >
+          <h3>Danh sách dịch vụ</h3>
+          <div className="wrap-device">
+            <div className="wrap-select">
+              <div className="select">
+                <label>Trạng thái hoạt động</label>
+                <Select
+                  placeholder="Tất cả"
+                  style={{ width: "100%" }}
+                  onChange={handleChangeActive}
+                  value={activeSelect}
+                  options={[
+                    { value: "all", label: "Tất cả" },
+                    { value: "true", label: "Hoạt động" },
+                    { value: "false", label: "Ngừng hoạt động" },
+                  ]}
+                />
+              </div>
+              <div className="select">
+                <label>Chọn thời gian</label>
+                <RangePicker format={dateFormat} onChange={onRangeChange} />
+              </div>
+            </div>
+            <div>
+              <label>Từ khóa</label>
+              <Search
+                placeholder="Nhập từ khóa"
+                allowClear
+                onSearch={onSearch}
+                style={{ width: "300px" }}
               />
             </div>
-            <div className="select">
-              <label>Chọn thời gian</label>
-              <RangePicker format={dateFormat} onChange={onRangeChange} />
-            </div>
           </div>
-          <div>
-            <label>Từ khóa</label>
-            <Search
-              placeholder="Nhập từ khóa"
-              allowClear
-              onSearch={onSearch}
-              style={{ width: "300px" }}
-            />
+          <Table
+            columns={columns}
+            dataSource={servicesData}
+            style={{ marginTop: "15px" }}
+            className="service-table"
+          />
+        </Content>
+        <div className="add-device" style={{ width: "100px", height: "90px" }}>
+          <div className="icon-add-device" onClick={handleAddService}>
+            <AiFillPlusSquare />
           </div>
+          <div className="text-add-device">Thêm dịch vụ</div>
         </div>
-        <Table
-          columns={columns}
-          dataSource={servicesData}
-          style={{ marginTop: "15px" }}
-          className="service-table"
-        />
-      </Content>
-      <div className="add-device">
-        <div className="icon-add-device" onClick={handleAddService}>
-          <AiFillPlusSquare />
-        </div>
-        <div className="text-add-device">Thêm dịch vụ</div>
       </div>
-    </div>
+    </Main>
   );
 };
 

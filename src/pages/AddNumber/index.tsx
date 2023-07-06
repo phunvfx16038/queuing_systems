@@ -5,9 +5,10 @@ import AddNumberModal from "../../Components/Modal/AddNumberModal";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { addProgression } from "../../app/progressionSlice";
 import { serviceProp } from "../../propTypes/serviceType";
+import Main from "../../Components/MainLayout";
 
 const { Content } = Layout;
-const { Option } = Select;
+
 const AddNumber = () => {
   const serviceData = useAppSelector((state) => state.service.service);
   const userData = useAppSelector((state) => state.user.user);
@@ -72,6 +73,12 @@ const AddNumber = () => {
 
   const onFinish = (values: any) => {
     const date = new Date();
+    const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    const month =
+      date.getMonth() + 1 < 10
+        ? "0" + (date.getMonth() + 1)
+        : date.getMonth() + 1;
+
     const startDate =
       date.getHours() +
       ":" +
@@ -79,11 +86,12 @@ const AddNumber = () => {
       ":" +
       date.getSeconds() +
       " " +
-      date.getDate() +
+      day +
       "/" +
-      date.getMonth() +
+      month +
       "/" +
       date.getFullYear();
+
     const expireDate =
       date.getHours() +
       1 +
@@ -92,9 +100,9 @@ const AddNumber = () => {
       ":" +
       date.getSeconds() +
       " " +
-      date.getDate() +
+      day +
       "/" +
-      date.getMonth() +
+      month +
       "/" +
       date.getFullYear();
     const serviceSelected = serviceData.filter(
@@ -115,82 +123,86 @@ const AddNumber = () => {
       service_name: currentServiceData.service_name,
       date: startDate,
       expire_date: expireDate,
-      state: "Đang chờ",
+      state: "waiting",
       supply: currentServiceData.description,
+      phone: userData[0].phone,
+      email: userData[0].email,
     };
     dispatch(addProgression(ordinalNumber));
     setShowModal(true);
   };
   return (
-    <Content
-      style={{
-        margin: "24px 16px 0",
-        backgroundColor: "#EAEAEC",
-      }}
-    >
-      <h3>Quản lý cấp số</h3>
-      <div
+    <Main>
+      <Content
         style={{
-          backgroundColor: "#ffffff",
-          padding: "20px 20px 50px 20px",
-          borderRadius: "5px",
+          margin: "24px 16px 0",
+          backgroundColor: "#EAEAEC",
         }}
       >
-        <Form
-          name="validateOnly"
-          layout="vertical"
-          autoComplete="off"
-          onFinish={onFinish}
+        <h3>Quản lý cấp số</h3>
+        <div
           style={{
-            width: "400px",
-            margin: "30px auto",
-            textAlign: "center",
+            backgroundColor: "#ffffff",
+            padding: "20px 20px 50px 20px",
+            borderRadius: "5px",
           }}
         >
-          <h3>Cấp số mới</h3>
-          <Form.Item
-            label="Dịch vụ khách hàng lựa chọn"
-            name="select_service"
-            style={{ width: "100%" }}
-            className="add-number"
-            rules={[{ required: true, message: "Vui lòng chọn dịch vụ" }]}
+          <Form
+            name="validateOnly"
+            layout="vertical"
+            autoComplete="off"
+            onFinish={onFinish}
+            style={{
+              width: "400px",
+              margin: "30px auto",
+              textAlign: "center",
+            }}
           >
-            <Select
-              placeholder="Chọn dịch vụ"
+            <h3>Cấp số mới</h3>
+            <Form.Item
+              label="Dịch vụ khách hàng lựa chọn"
+              name="select_service"
               style={{ width: "100%" }}
-              value={selectValue}
-              onChange={handleSelectService}
-              options={[
-                { value: "all", label: "Tất cả" },
-                { value: "Khám phụ khoa", label: "Khám sản phụ khoa" },
-                { value: "Khám răng hàm mặt", label: "Khám răng hàm mặt" },
-                { value: "Khám tai mũi họng", label: "Khám tai mũi họng" },
-                { value: "Khám tổng quát", label: "Khám tổng quát" },
-                { value: "Khám hô hấp", label: "Khám hô hấp" },
-              ]}
-            />
-          </Form.Item>
-          <Form.Item style={{ textAlign: "center", marginTop: "20px" }}>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-              style={{ width: "100px" }}
+              className="add-number"
+              rules={[{ required: true, message: "Vui lòng chọn dịch vụ" }]}
             >
-              In số
-            </Button>
-          </Form.Item>
-        </Form>
-        <AddNumberModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          stt={orderNumber}
-          date={date}
-          expire={expireDate}
-          serviceName={selectValue}
-        />
-      </div>
-    </Content>
+              <Select
+                placeholder="Chọn dịch vụ"
+                style={{ width: "100%" }}
+                value={selectValue}
+                onChange={handleSelectService}
+                options={[
+                  { value: "all", label: "Tất cả" },
+                  { value: "Khám phụ khoa", label: "Khám sản phụ khoa" },
+                  { value: "Khám răng hàm mặt", label: "Khám răng hàm mặt" },
+                  { value: "Khám tai mũi họng", label: "Khám tai mũi họng" },
+                  { value: "Khám tổng quát", label: "Khám tổng quát" },
+                  { value: "Khám hô hấp", label: "Khám hô hấp" },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item style={{ textAlign: "center", marginTop: "20px" }}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+                style={{ width: "100px" }}
+              >
+                In số
+              </Button>
+            </Form.Item>
+          </Form>
+          <AddNumberModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            stt={orderNumber}
+            date={date}
+            expire={expireDate}
+            serviceName={selectValue}
+          />
+        </div>
+      </Content>
+    </Main>
   );
 };
 

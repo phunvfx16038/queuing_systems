@@ -7,15 +7,10 @@ import { roleProp } from "../../propTypes/roleType";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { getRoleManage, roleManageCollection } from "../../app/roleSlice";
 import { onSnapshot } from "firebase/firestore";
-import { userType } from "../../dataTypes/userType";
-import { configureStore } from "@reduxjs/toolkit";
+import Main from "../../Components/MainLayout";
 const { Content } = Layout;
 const { Search } = Input;
-type manageRoleType = {
-  role_name: string;
-  roleNumber: number;
-  description: string;
-};
+
 const columns: ColumnsType<roleProp> = [
   {
     title: "Tên vai trò",
@@ -107,39 +102,41 @@ const Managerole = () => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Content
-        style={{
-          margin: "24px 16px 0",
-          backgroundColor: "#EAEAEC",
-        }}
-      >
-        <h3>Danh sách vai trò</h3>
-        <div className="wrap-device" style={{ justifyContent: "end" }}>
-          <div>
-            <label>Từ khóa</label>
-            <Search
-              placeholder="Nhập từ khóa"
-              allowClear
-              onSearch={onSearch}
-              style={{ width: "300px" }}
-            />
+    <Main>
+      <div style={{ display: "flex", height: "100vh" }}>
+        <Content
+          style={{
+            margin: "24px 16px 0",
+            backgroundColor: "#EAEAEC",
+          }}
+        >
+          <h3>Danh sách vai trò</h3>
+          <div className="wrap-device" style={{ justifyContent: "end" }}>
+            <div>
+              <label>Từ khóa</label>
+              <Search
+                placeholder="Nhập từ khóa"
+                allowClear
+                onSearch={onSearch}
+                style={{ width: "300px" }}
+              />
+            </div>
           </div>
+          <Table
+            columns={columns}
+            dataSource={roleManage}
+            style={{ marginTop: "15px" }}
+            className="service-table"
+          />
+        </Content>
+        <div className="add-device" style={{ width: "90px", height: "90px" }}>
+          <div className="icon-add-device" onClick={handleAddRole}>
+            <AiFillPlusSquare />
+          </div>
+          <div className="text-add-device">Thêm vai trò</div>
         </div>
-        <Table
-          columns={columns}
-          dataSource={roleManage}
-          style={{ marginTop: "15px" }}
-          className="service-table"
-        />
-      </Content>
-      <div className="add-device">
-        <div className="icon-add-device" onClick={handleAddRole}>
-          <AiFillPlusSquare />
-        </div>
-        <div className="text-add-device">Thêm vai trò</div>
       </div>
-    </div>
+    </Main>
   );
 };
 

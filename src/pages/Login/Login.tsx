@@ -1,39 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, Input, Col, Row } from "antd";
-import { PoweroffOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Col, Row, Spin } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import "./login.css";
-import { loginProp } from "../../dataTypes/loginType";
+
 import { useAppDispatch, useAppSelector } from "../../app/store";
-import { loginUser } from "../../app/userSlice";
+import { loginUser } from "../../app/authSlice";
+import { loginProp } from "../../propTypes/loginType";
 
 const Login = () => {
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loginData, setLoginData] = useState<loginProp>({
-    email: "",
+    userName: "",
     password: "",
   });
 
-  // useEffect(() => {
-  //   if (user.user.email !== "") {
-  //     navigate("/userProfile");
-  //   }
-  // }, [user, navigate]);
+  useEffect(() => {
+    if (user.login.user_name !== "") {
+      navigate("/dashboard");
+    }
+  }, [navigate, user.login.user_name]);
 
-  console.log(user);
-  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginData({ ...loginData, email: e.target.value });
+  const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginData({ ...loginData, userName: e.target.value });
   };
 
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, password: e.target.value });
   };
 
-  const onFinish = () => {
-    dispatch(loginUser(loginData));
+  const onFinish = (values: loginProp) => {
+    dispatch(loginUser(values));
   };
   return (
     <Row style={{ height: "100vh" }}>
@@ -52,17 +51,17 @@ const Login = () => {
           >
             <Form.Item
               label="Tên đăng nhập *"
+              name="userName"
               rules={[
-                { required: true, message: "Please input your Username!" },
+                { required: true, message: "Vui lòng nhập tên đăng nhập!" },
               ]}
             >
-              <Input onChange={onChangeEmail} value={loginData.email} />
+              <Input onChange={onChangeUserName} value={loginData.userName} />
             </Form.Item>
             <Form.Item
               label="Mật khẩu *"
-              rules={[
-                { required: true, message: "Please input your Password!" },
-              ]}
+              name="password"
+              rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
             >
               <Input.Password
                 onChange={onChangePassword}
@@ -71,7 +70,7 @@ const Login = () => {
             </Form.Item>
             {user.isError && <div className="errorLogin">{user.isError}</div>}
             <Form.Item>
-              <Link className="login-form-forgot" to="resetPassword">
+              <Link className="login-form-forgot" to="/resetPassword">
                 Quên mật khẩu?
               </Link>
             </Form.Item>
@@ -81,10 +80,10 @@ const Login = () => {
                 <Button
                   type="primary"
                   style={{ width: "100px" }}
-                  icon={<PoweroffOutlined />}
-                  loading
                   className="login-form-button"
-                />
+                >
+                  <Spin />
+                </Button>
               ) : (
                 <Button
                   type="primary"

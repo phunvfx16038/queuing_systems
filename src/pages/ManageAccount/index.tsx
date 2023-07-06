@@ -4,10 +4,11 @@ import type { ColumnsType } from "antd/es/table";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillPlusSquare } from "react-icons/ai";
 import "./manageAccount.css";
-import { userType } from "../../dataTypes/userType";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { onSnapshot } from "firebase/firestore";
 import { getUsers, userCollection } from "../../app/userSlice";
+import { userType } from "../../propTypes/userType";
+import Main from "../../Components/MainLayout";
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -37,7 +38,6 @@ const columns: ColumnsType<userType> = [
     title: "Vai trò",
     dataIndex: "role",
     key: "role",
-    
   },
   {
     title: "Trạng thái hoạt động",
@@ -119,55 +119,57 @@ const ManageAccount = () => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Content
-        style={{
-          margin: "24px 16px 0",
-          backgroundColor: "#EAEAEC",
-        }}
-      >
-        <h3>Danh sách tài khoản</h3>
-        <div className="wrap-device">
-          <div className="wrap-select">
-            <div className="select">
-              <label>Trạng thái hoạt động</label>
-              <Select
-                placeholder="Tất cả"
-                style={{ width: "100%" }}
-                onChange={handleSelectActive}
-                value={active}
-                options={[
-                  { value: "all", label: "Tất cả" },
-                  { value: "true", label: "Hoạt động" },
-                  { value: "false", label: "Ngừng hoạt động" },
-                ]}
+    <Main>
+      <div style={{ display: "flex", height: "100vh" }}>
+        <Content
+          style={{
+            margin: "24px 16px 0",
+            backgroundColor: "#EAEAEC",
+          }}
+        >
+          <h3>Danh sách tài khoản</h3>
+          <div className="wrap-device">
+            <div className="wrap-select">
+              <div className="select">
+                <label>Trạng thái hoạt động</label>
+                <Select
+                  placeholder="Tất cả"
+                  style={{ width: "100%" }}
+                  onChange={handleSelectActive}
+                  value={active}
+                  options={[
+                    { value: "all", label: "Tất cả" },
+                    { value: "true", label: "Hoạt động" },
+                    { value: "false", label: "Ngừng hoạt động" },
+                  ]}
+                />
+              </div>
+            </div>
+            <div>
+              <label>Từ khóa</label>
+              <Search
+                placeholder="Nhập từ khóa"
+                allowClear
+                onSearch={onSearch}
+                style={{ width: "300px" }}
               />
             </div>
           </div>
-          <div>
-            <label>Từ khóa</label>
-            <Search
-              placeholder="Nhập từ khóa"
-              allowClear
-              onSearch={onSearch}
-              style={{ width: "300px" }}
-            />
+          <Table
+            columns={columns}
+            dataSource={manageAccounts}
+            style={{ marginTop: "15px" }}
+            className="account-table"
+          />
+        </Content>
+        <div className="add-device" style={{ width: "90px", height: "90px" }}>
+          <div className="icon-add-device" onClick={handleAddRole}>
+            <AiFillPlusSquare />
           </div>
+          <div className="text-add-device">Thêm tài khoản</div>
         </div>
-        <Table
-          columns={columns}
-          dataSource={manageAccounts}
-          style={{ marginTop: "15px" }}
-          className="account-table"
-        />
-      </Content>
-      <div className="add-device">
-        <div className="icon-add-device" onClick={handleAddRole}>
-          <AiFillPlusSquare />
-        </div>
-        <div className="text-add-device">Thêm tài khoản</div>
       </div>
-    </div>
+    </Main>
   );
 };
 

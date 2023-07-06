@@ -8,4 +8,5 @@ export type userType = {
     active:boolean
     role:string
     user_name:string
+    accessToken?:string
 }
