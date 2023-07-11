@@ -8,14 +8,9 @@ import { useAppDispatch, useAppSelector } from "../../app/store";
 import { deviceCollection, getDevices } from "../../app/deviceSlice";
 import { onSnapshot } from "firebase/firestore";
 import { deviceProp } from "../../propTypes/deviceType";
-import Main from "../../Components/MainLayout";
 
 const { Content } = Layout;
 const { Search } = Input;
-
-type deviceType = {
-  deviceData: deviceProp[];
-};
 
 const columns: ColumnsType<deviceProp> = [
   {
@@ -152,7 +147,10 @@ const Device = () => {
       return (
         device.name.toLowerCase().includes(value.toLowerCase()) ||
         device.code.toLowerCase().includes(value.toLowerCase()) ||
-        device.using_service.includes(value.toLowerCase())
+        device.using_service
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase())
       );
     });
     setDevicesData(searchDeviceData);
@@ -163,70 +161,69 @@ const Device = () => {
   };
 
   return (
-    <Main>
-      <div style={{ display: "flex", height: "100vh" }}>
-        <Content
-          style={{
-            margin: "24px 16px 0",
-            backgroundColor: "#EAEAEC",
-          }}
-        >
-          <h3>Danh sách thiết bị</h3>
-          <div className="wrap-device">
-            <div className="wrap-select">
-              <div className="select">
-                <label>Trạng thái hoạt động</label>
-                <Select
-                  style={{ width: "100%" }}
-                  onChange={handleChangeActive}
-                  value={activeSelect}
-                  defaultValue={"all"}
-                  options={[
-                    { value: "all", label: "Tất cả" },
-                    { value: "true", label: "Hoạt động" },
-                    { value: "false", label: "Ngừng hoạt động" },
-                  ]}
-                />
-              </div>
-              <div className="select">
-                <label>Trạng thái kết nối</label>
-                <Select
-                  style={{ width: "100%" }}
-                  onChange={handleChangeConnect}
-                  value={connectSelect}
-                  defaultValue={"all"}
-                  options={[
-                    { value: "all", label: "Tất cả" },
-                    { value: "true", label: "Kết nối" },
-                    { value: "false", label: "Ngắt kết nối" },
-                  ]}
-                />
-              </div>
+    <div style={{ display: "flex", height: "100vh" }}>
+      <Content
+        style={{
+          margin: "24px 16px 0",
+          backgroundColor: "#EAEAEC",
+        }}
+      >
+        <h3>Danh sách thiết bị</h3>
+        <div className="wrap-device">
+          <div className="wrap-select">
+            <div className="select">
+              <label>Trạng thái hoạt động</label>
+              <Select
+                style={{ width: "100%" }}
+                onChange={handleChangeActive}
+                value={activeSelect}
+                defaultValue={"all"}
+                options={[
+                  { value: "all", label: "Tất cả" },
+                  { value: "true", label: "Hoạt động" },
+                  { value: "false", label: "Ngừng hoạt động" },
+                ]}
+              />
             </div>
-            <div>
-              <label>Từ khóa</label>
-              <Search
-                placeholder="Nhập từ khóa"
-                allowClear
-                onSearch={onSearch}
-                style={{ width: "300px" }}
+            <div className="select">
+              <label>Trạng thái kết nối</label>
+              <Select
+                style={{ width: "100%" }}
+                onChange={handleChangeConnect}
+                value={connectSelect}
+                defaultValue={"all"}
+                options={[
+                  { value: "all", label: "Tất cả" },
+                  { value: "true", label: "Kết nối" },
+                  { value: "false", label: "Ngắt kết nối" },
+                ]}
               />
             </div>
           </div>
-          <Table
-            columns={columns}
-            dataSource={devicesData}
-            style={{ marginTop: "15px" }}
-          />
-        </Content>
-        <div className="add-device" style={{ width: "100px", height: "100px" }}>
-          <div className="icon-add-device" onClick={handleAddDevice}>
-            <AiFillPlusSquare />
+          <div>
+            <label>Từ khóa</label>
+            <Search
+              placeholder="Nhập từ khóa"
+              allowClear
+              onSearch={onSearch}
+              style={{ width: "300px" }}
+            />
           </div>
-          <div className="text-add-device">Thêm thiết bị</div>
         </div>
+        <Table
+          columns={columns}
+          dataSource={devicesData}
+          style={{ marginTop: "15px" }}
+          className="device-table"
+        />
+      </Content>
+      <div className="add-device" style={{ width: "100px", height: "100px" }}>
+        <div className="icon-add-device" onClick={handleAddDevice}>
+          <AiFillPlusSquare />
+        </div>
+        <div className="text-add-device">Thêm thiết bị</div>
       </div>
-    </Main>
+    </div>
   );
 };
 

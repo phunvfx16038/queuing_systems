@@ -1,16 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { addDoc, collection, doc, getFirestore, setDoc } from "firebase/firestore"
 import { app } from "../firebase/firebase"
-import { diaryType } from "../propTypes/diaryType"
-
+import { userDiaryType } from "../pages/UserDiary"
 
 export type initProp = {
-    diary:diaryType[]
+    diary:userDiaryType[]
     isLoading:boolean,
     isError:undefined|string
 }
 export const db = getFirestore(app)
-export const diaryCollection = collection(db,'diary')
+export const diaryCollection = collection(db,'diarys')
 
 const initialState:initProp = {
     diary:[],
@@ -18,38 +17,40 @@ const initialState:initProp = {
     isError:undefined
 }
 
-type editdiaryType={
-    id:string
-    editData:diaryType
-}
-
-const addDiarysToFireBase = async (diary:diaryType) =>{
+const addDiarysToFireBase = async (diary:userDiaryType) =>{
     await addDoc(diaryCollection,{...diary})
 }
 
 export const addDiary = createAsyncThunk(
     'diary/addDiary',
-    async(diary:diaryType)=>{
+    async(diary:userDiaryType)=>{
         try{
-            const res = await addDiarysToFireBase(diary)
+            const date = new Date();
+            const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            const month =
+            date.getMonth() + 1 < 10
+                ? "0" + (date.getMonth() + 1)
+                : date.getMonth() + 1;
+
+            const currenDate =
+            date.getHours() +
+            ":" +
+            date.getMinutes() +
+            ":" +
+            date.getSeconds() +
+            " " +
+            day +
+            "/" +
+            month +
+            "/" +
+            date.getFullYear();
+            const newDiary = {...diary,date:currenDate,ipAddress:'192.168.0.1'}
+            const res = await addDiarysToFireBase(newDiary)
            return res
         }catch(err){
             return err
         }
       
-    }
-)
-
-export const editDiary = createAsyncThunk(
-    'diary,editDiary',
-    async(editData:editdiaryType)=>{
-        try{
-            const getDiary = doc(db,`diarys/${editData.id}`)
-            const res = await setDoc(getDiary,editData.editData,{merge:true})
-        }catch(err){
-            console.log(err)
-        }
-
     }
 )
 

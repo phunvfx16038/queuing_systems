@@ -5,9 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { roleProp } from "../../propTypes/roleType";
 import { useAppDispatch, useAppSelector } from "../../app/store";
-import { getRoleManage, roleManageCollection } from "../../app/roleSlice";
+import {
+  getRoleManage,
+  getRoleManageCustom,
+  roleManageCollection,
+} from "../../app/roleSlice";
 import { onSnapshot } from "firebase/firestore";
-import Main from "../../Components/MainLayout";
 const { Content } = Layout;
 const { Search } = Input;
 
@@ -32,7 +35,7 @@ const columns: ColumnsType<roleProp> = [
     dataIndex: "update",
     key: "update",
     render: (_, record) => (
-      <Link to="/quanlyvaitro/capnhatvaitro" state={{ record }}>
+      <Link to="/caidathethong/quanlyvaitro/capnhatvaitro" state={{ record }}>
         Cập nhật
       </Link>
     ),
@@ -55,7 +58,7 @@ const Managerole = () => {
         console.log(item);
         const { role } = user;
         a = { ...item, userNumber: 0 };
-        a.userNumber = a.userNumber + 1;
+        a.userNumber++;
         return a;
       }, Object.create(null));
       // );
@@ -69,21 +72,28 @@ const Managerole = () => {
   console.log(customManageRoleData());
 
   useEffect(() => {
-    const unsub = onSnapshot(roleManageCollection, (snapshot) => {
+    onSnapshot(roleManageCollection, (snapshot) => {
       let data: any = snapshot.docs.map((doc) => {
         return {
           id: doc.id,
           ...doc.data(),
         };
       });
-
-      dispatch(getRoleManage(data));
-      setRoleManage(data);
+      const mangegeroleCustom = data.map((item: any) => {
+        // Object.values(
+        const custom = userData.reduce((a, user) => {
+          console.log(item);
+          const { role } = user;
+          a = { ...item, userNumber: 0 };
+          a.userNumber = a.userNumber + 1;
+          return a;
+        }, Object.create(null));
+        // );
+        return custom;
+      });
+      dispatch(getRoleManageCustom(mangegeroleCustom));
+      setRoleManage(mangegeroleCustom);
     });
-
-    return () => {
-      unsub();
-    };
   }, [dispatch]);
 
   const onSearch = (value: string) => {
@@ -98,45 +108,43 @@ const Managerole = () => {
   };
 
   const handleAddRole = () => {
-    navigate("/quanlyvaitro/themvaitro");
+    navigate("/caidathethong/quanlyvaitro/themvaitro");
   };
 
   return (
-    <Main>
-      <div style={{ display: "flex", height: "100vh" }}>
-        <Content
-          style={{
-            margin: "24px 16px 0",
-            backgroundColor: "#EAEAEC",
-          }}
-        >
-          <h3>Danh sách vai trò</h3>
-          <div className="wrap-device" style={{ justifyContent: "end" }}>
-            <div>
-              <label>Từ khóa</label>
-              <Search
-                placeholder="Nhập từ khóa"
-                allowClear
-                onSearch={onSearch}
-                style={{ width: "300px" }}
-              />
-            </div>
+    <div style={{ display: "flex", height: "100vh" }}>
+      <Content
+        style={{
+          margin: "24px 16px 0",
+          backgroundColor: "#EAEAEC",
+        }}
+      >
+        <h3>Danh sách vai trò</h3>
+        <div className="wrap-device" style={{ justifyContent: "end" }}>
+          <div>
+            <label>Từ khóa</label>
+            <Search
+              placeholder="Nhập từ khóa"
+              allowClear
+              onSearch={onSearch}
+              style={{ width: "300px" }}
+            />
           </div>
-          <Table
-            columns={columns}
-            dataSource={roleManage}
-            style={{ marginTop: "15px" }}
-            className="service-table"
-          />
-        </Content>
-        <div className="add-device" style={{ width: "90px", height: "90px" }}>
-          <div className="icon-add-device" onClick={handleAddRole}>
-            <AiFillPlusSquare />
-          </div>
-          <div className="text-add-device">Thêm vai trò</div>
         </div>
+        <Table
+          columns={columns}
+          dataSource={roleManage}
+          style={{ marginTop: "15px" }}
+          className="service-table"
+        />
+      </Content>
+      <div className="add-device" style={{ width: "90px", height: "90px" }}>
+        <div className="icon-add-device" onClick={handleAddRole}>
+          <AiFillPlusSquare />
+        </div>
+        <div className="text-add-device">Thêm vai trò</div>
       </div>
-    </Main>
+    </div>
   );
 };
 

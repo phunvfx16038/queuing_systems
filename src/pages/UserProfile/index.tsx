@@ -9,11 +9,10 @@ import Main from "../../Components/MainLayout";
 const { Content } = Layout;
 
 const UserProfile = () => {
-  // const userProfile = useAppSelector((state) => state.user.user);
+  const userProfile = useAppSelector((state) => state.auth.login);
   return (
-    <Main>
-      <Content style={{ margin: "24px 16px 0", backgroundColor: "#EAEAEC" }}>
-        {/* <div
+    <Content style={{ margin: "24px 16px 0", backgroundColor: "#EAEAEC" }}>
+      <div
         style={{
           padding: 24,
           minHeight: 360,
@@ -45,33 +44,32 @@ const UserProfile = () => {
               <Row gutter={[16, 16]}>
                 <Col span={12}>
                   <Form.Item label="Tên người dùng ">
-                    <Input readOnly value={userProfile.displayName || ""} />
+                    <Input readOnly value={userProfile.displayName} />
                   </Form.Item>
                   <Form.Item label="Số điện thoại">
-                    <Input readOnly value={userProfile.phoneNumber || ""} />
+                    <Input readOnly value={userProfile.phone} />
                   </Form.Item>
                   <Form.Item label="Email">
-                    <Input readOnly value={userProfile.email || ""} />
+                    <Input readOnly value={userProfile.email} />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item label="Tên đăng nhập">
-                    <Input readOnly value={userProfile.email || ""} />
+                    <Input readOnly value={userProfile.user_name} />
                   </Form.Item>
                   <Form.Item label="Mật khẩu">
-                    <Input readOnly />
+                    <Input readOnly value={userProfile.password} />
                   </Form.Item>
                   <Form.Item label="Vai trò">
-                    <Input readOnly />
+                    <Input readOnly value={userProfile.role} />
                   </Form.Item>
                 </Col>
               </Row>
             </Form>
           </Col>
         </Row>
-      </div> */}
-      </Content>
-    </Main>
+      </div>
+    </Content>
   );
 };
 

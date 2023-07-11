@@ -3,6 +3,7 @@
     text-align: center;
     margin-bottom: 20px;
     padding: 35px;
+    cursor: pointer;
   }
   
   .demo-logo-vertical img {
@@ -13,19 +14,48 @@
     padding:10px 25px;
     color:#FF7506;
     background-color:#FFF2E7;
-    margin-top: 150px;
+    cursor: pointer;
+    margin-top: 80px;
 }
 
 .icon-logout{
     margin-right:10px
 }
 
-.ant-menu.ant-menu-light .ant-menu-item-selected {
-    background-color: #FF7506!important;
-    color: white!important
-  }
+.ant-menu-light .ant-menu-item-selected,
+.ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title
+{
+    background-color: #FF7506 !important;
+    color: white !important
+}
 
-  .dropdown {
+.ant-menu .ant-menu-submenu-arrow::after{
+  position: absolute;
+  height: 1.5px;
+  background-color: currentcolor;
+  content: '\2807';
+  top: -20px;
+  width: 0px;
+  transform: rotate(-14deg);
+  font-size: 18px;
+}
+
+.ant-menu .ant-menu-submenu-arrow::before
+{
+  display: none;
+}
+
+.ant-menu .ant-menu-submenu-open.ant-menu-submenu-inline>.ant-menu-submenu-title>.ant-menu-submenu-arrow::after{
+  position: absolute;
+  height: 1.5px;
+  background-color: currentcolor;
+  content: '\2807';
+  top: -20px;
+  width: 0px;
+  transform: rotate(-14deg);
+}
+
+  /* .dropdown {
     position: relative;
     display: inline-block;
     padding: 10px 30px;
@@ -57,5 +87,5 @@
 
   .dropdown:hover .dropdown-content {
     display: block;
-  }
+  } */
   

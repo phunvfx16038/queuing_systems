@@ -5,11 +5,11 @@ import Headers from "../Headers";
 import { JsxElement } from "typescript";
 import { ReactNode } from "react";
 
-type mainProp = {
-  children: ReactNode;
-};
+// type mainProp = {
+//   children: ReactNode;
+// };
 
-function Main({ children }: mainProp) {
+function Main() {
   return (
     <>
       <Layout hasSider>
@@ -22,10 +22,9 @@ function Main({ children }: mainProp) {
           className="site-layout"
         >
           <Headers />
-          {children}
+          <Outlet />
         </Layout>
       </Layout>
-      <Outlet />
     </>
   );
 }

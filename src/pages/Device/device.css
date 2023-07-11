@@ -39,7 +39,7 @@
     height:80px!important
 }
 
-.ant-table-wrapper .ant-table-thead >tr>th:last-child,.ant-table-wrapper .ant-table-thead >tr>th:nth-child(7){
+.ant-table-wrapper .ant-table-thead >tr>th:last-child,.device-table .ant-table-thead >tr>th:nth-child(7){
     color:#FF9138
 }
 

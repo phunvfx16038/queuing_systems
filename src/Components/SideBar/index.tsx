@@ -10,78 +10,105 @@ import {
 import { FaBuffer, FaRegComments } from "react-icons/fa";
 import { Layout, Menu, MenuProps } from "antd";
 import "./sidebar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/firebase";
+import { useAppDispatch } from "../../app/store";
+import { logout } from "../../app/authSlice";
 
 const { Sider } = Layout;
-const sideBar = [
-  {
-    title: "Dashboard",
-    icon: <CiGrid42 />,
-    link: "/dashboard",
-  },
-  {
-    title: "Thiết bị",
-    icon: <CiMonitor />,
-    link: "/thietbi",
-  },
-  {
-    title: "Dịch vụ",
-    icon: <FaRegComments />,
-    link: "/dichvu",
-  },
-  {
-    title: "Cấp số",
-    icon: <FaBuffer />,
-    link: "/capso",
-  },
-  {
-    title: "Báo cáo",
-    icon: <CiReceipt />,
-    link: "/baocao",
-  },
+
+type MenuItem = Required<MenuProps>["items"][number];
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[]
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+  } as MenuItem;
+}
+
+const items: MenuItem[] = [
+  getItem(<Link to="/dashboard">Dashboard</Link>, "dashboard", <CiGrid42 />),
+  getItem(<Link to="/thietbi">Thiết bị</Link>, "device", <CiMonitor />),
+  getItem(<Link to="/dichvu">Dịch vụ</Link>, "service", <FaRegComments />),
+  getItem(<Link to="/capso">Cấp số</Link>, "progression", <FaBuffer />),
+  getItem(<Link to="/baocao">Báo cáo</Link>, "report", <CiReceipt />),
+  getItem("Cài đặt hệ thống", "setting", <CiSettings />, [
+    getItem(
+      <Link to="/caidathethong/quanlyvaitro">Quản lý vai trò </Link>,
+      "3"
+    ),
+    getItem(
+      <Link to="/caidathethong/quanlytaikhoan">Quản lý tài khoản</Link>,
+      "4"
+    ),
+    getItem(
+      <Link to="/caidathethong/nhatkynguoidung">Nhật ký người dùng</Link>,
+      "5"
+    ),
+  ]),
 ];
 const SideBar = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        navigate("/");
+        localStorage.removeItem("user");
+        const resetLoginData = {
+          displayName: "",
+          email: "",
+          phone: "",
+          photoUrl: "",
+          password: "",
+          active: true,
+          role: "",
+          user_name: "",
+        };
+        const data = {
+          resetLoginData,
+          isLogin: false,
+        };
+        dispatch(logout(data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <Sider
       breakpoint="lg"
-      collapsedWidth="0"
       style={{
         backgroundColor: "#fff",
-        overflow: "auto",
-        height: "100vh",
         position: "fixed",
         left: 0,
         top: 0,
-        bottom: 0,
-      }}
-      onBreakpoint={(broken) => {
-        console.log(broken);
-      }}
-      onCollapse={(collapsed, type) => {
-        console.log(collapsed, type);
+        height: "100vh",
       }}
     >
       <div className="demo-logo-vertical">
-        <img src={logo} alt="logo" />
+        <Link to="/dashboard">
+          <img src={logo} alt="logo" />
+        </Link>
       </div>
-      <Menu theme="light" mode="inline">
-        {sideBar?.map((item, index) => (
-          <Menu.Item key={index} icon={item.icon}>
-            <Link to={item.link}>{item.title}</Link>
-          </Menu.Item>
-        ))}
-      </Menu>
-      <div className="dropdown">
-        <div className="dropbtn">
-          <CiSettings /> Cài đặt hệ thống
-        </div>
-        <div className="dropdown-content">
-          <Link to="/quanlyvaitro">Quản lý vai trò </Link>
-          <Link to="/quanlytaikhoan">Quản lý tài khoản</Link>
-          <Link to="/nhatkynguoidung">Nhật ký người dùng</Link>
-        </div>
-      </div>
-      <div className="logout">
+      <Menu
+        theme="light"
+        mode="inline"
+        defaultSelectedKeys={["1"]}
+        style={{ borderRight: 0 }}
+        items={items}
+      />
+      <div className="logout" onClick={handleLogout}>
         <span className="icon-logout">
           <CiLogout />
         </span>

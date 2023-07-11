@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { userType } from "../propTypes/userType";
 import { loginProp } from "../propTypes/loginType";
@@ -27,7 +27,7 @@ export const loginUser = createAsyncThunk<userType,loginProp,{ rejectValue: stri
                 active:true,
                 role:'',
                 user_name:'',
-                accessToken:''
+             
             }
             const email = `${data.userName}@gmail.com`
             const res = await signInWithEmailAndPassword(auth,email,data.password)
@@ -36,6 +36,7 @@ export const loginUser = createAsyncThunk<userType,loginProp,{ rejectValue: stri
             const getData = await getDoc(q);
             const userLogin:any = getData.data()
             userData = {...userLogin}
+            localStorage.setItem("user", JSON.stringify(userData));
            return userData
         }catch(err:any){
             console.log(err.code)
@@ -48,6 +49,7 @@ export const loginUser = createAsyncThunk<userType,loginProp,{ rejectValue: stri
     }
 )
 
+
 const initialState:initProp = {
     login:{
         displayName:'',
@@ -58,17 +60,25 @@ const initialState:initProp = {
         active:true,
         role:'',
         user_name:'',
-        accessToken:''
     },
     isLoading:false,
     isError:undefined,
     isLogin:false
 }
 
-export const userSlice = createSlice({
+export const authSlice = createSlice({
     name:'auth',
     initialState,
-    reducers:{},
+    reducers:{
+        checkSignIn:(state,action)=>{
+            state.isLogin = action.payload.isLogin
+            state.login = action.payload.userLoginData
+        },
+        logout:(state,action)=>{
+            state.isLogin = action.payload.isLogin
+            state.login = action.payload.userLoginData
+        }
+    },
     extraReducers:(builder)=>{
         builder
             .addCase(loginUser.pending,(state,action)=>{
@@ -88,4 +98,5 @@ export const userSlice = createSlice({
             })
     }
 })
-export default userSlice.reducer
+export const {checkSignIn,logout} = authSlice.actions
+export default authSlice.reducer

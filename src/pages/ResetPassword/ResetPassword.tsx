@@ -10,6 +10,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 const ResetPassword = () => {
   const [email, setEmail] = useState<string>("");
   const [errorEmail, setErrorEmail] = useState<string>("");
+  const [completeGetEmail, setCompleteGetEmail] = useState<string>("");
   const navigate = useNavigate();
   const cancleReset = () => {
     navigate("/");
@@ -19,13 +20,17 @@ const ResetPassword = () => {
     setEmail(e.target.value);
   };
 
-  const onFinish = () => {
-    return sendPasswordResetEmail(auth, email)
+  const onFinish = async () => {
+    return await sendPasswordResetEmail(auth, email)
       .then((data) => {
         // navigate("/enterResetPassword");
+        setCompleteGetEmail(
+          "Vui lòng kiểm tra Email để được hướng dẫn thay đổi mật khẩu!"
+        );
+        setErrorEmail("");
       })
       .catch((error) => {
-        setErrorEmail("không tìm thấy địa chỉ Email!");
+        setErrorEmail("Không tìm thấy địa chỉ Email!");
       });
   };
   return (
@@ -44,7 +49,13 @@ const ResetPassword = () => {
             layout="vertical"
           >
             <div className="title-reset">Đặt lại mật khẩu</div>
-            <p>Vui lòng nhập email để đặt lại mật khẩu của bạn *</p>
+            {completeGetEmail && (
+              <div style={{ marginBottom: "10px" }}>{completeGetEmail}</div>
+            )}
+
+            <p style={{ marginBottom: "10px" }}>
+              Vui lòng nhập email để đặt lại mật khẩu của bạn *
+            </p>
             <Form.Item
               name="email"
               rules={[
@@ -60,7 +71,11 @@ const ResetPassword = () => {
             >
               <Input onChange={handleEmailReset} value={email} />
             </Form.Item>
-            {errorEmail && <div className="errorLogin">{errorEmail}</div>}
+            {errorEmail && (
+              <div className="errorLogin" style={{ marginBottom: "10px" }}>
+                {errorEmail}
+              </div>
+            )}
             <Form.Item style={{ textAlign: "center" }}>
               <Button
                 type="primary"

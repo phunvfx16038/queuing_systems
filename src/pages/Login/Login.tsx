@@ -18,10 +18,10 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (user.login.user_name !== "") {
+    if (user.isLogin) {
       navigate("/dashboard");
     }
-  }, [navigate, user.login.user_name]);
+  }, [navigate, user.isLogin]);
 
   const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, userName: e.target.value });

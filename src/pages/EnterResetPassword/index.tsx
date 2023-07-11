@@ -1,15 +1,34 @@
-import React from "react";
-import { Button, Form, Input, Col, Row } from "antd";
+import React, { useState } from "react";
+import { Button, Form, Input, Col, Row, Spin } from "antd";
 import logo from "../../assets/images/logo.png";
 import "../Login/login.css";
 import "../ResetPassword/resetPassword.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { auth } from "../../firebase/firebase";
+import { confirmPasswordReset } from "firebase/auth";
 
 const EnterResetPassword = () => {
   const navigate = useNavigate();
+  // const pathname = useLocation();
+  // const data = pathname.search.split("&");
+  // const code = data[1].split("=")[1];
+  const [searchParams] = useSearchParams();
+  let oobCode: string | null = searchParams.get("oobCode");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onFinish = () => {
-    navigate("/login");
+  const onFinish = async (values: any) => {
+    try {
+      if (oobCode) {
+        await confirmPasswordReset(auth, oobCode, values.password);
+        setIsLoading(true);
+        navigate("/login");
+      } else {
+        window.alert("Something is wrong; try again later!");
+        console.log("missing oobCode");
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -30,29 +49,49 @@ const EnterResetPassword = () => {
             <div className="title-reset">Đặt lại mật khẩu mới</div>
             <Form.Item
               label="Mật khẩu *"
-              rules={[
-                { required: true, message: "Please input your Username!" },
-              ]}
+              name="password"
+              rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
             >
               <Input.Password />
             </Form.Item>
             <Form.Item
               label="Nhập lại mật khẩu *"
+              name="retype"
               rules={[
-                { required: true, message: "Please input your Password!" },
+                { required: true, message: "Vui lòng nhập lại mật khẩu!" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Mật khẩu không trùng khớp!")
+                    );
+                  },
+                }),
               ]}
             >
               <Input.Password />
             </Form.Item>
 
             <Form.Item style={{ textAlign: "center" }}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-              >
-                Xác nhận
-              </Button>
+              {isLoading ? (
+                <Button
+                  type="primary"
+                  style={{ width: "100px" }}
+                  className="login-form-button"
+                >
+                  <Spin />
+                </Button>
+              ) : (
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="login-form-button"
+                >
+                  Xác nhận
+                </Button>
+              )}
             </Form.Item>
           </Form>
         </div>

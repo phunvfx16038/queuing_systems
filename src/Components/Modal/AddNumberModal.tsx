@@ -5,13 +5,20 @@ import "./addNumber.css";
 type addnumberModalType = {
   showModal: boolean;
   setShowModal: (value: boolean) => void;
-  stt:string
-  date:string
-  expire:string
-  serviceName:string
+  stt: string;
+  date: string;
+  expire: string;
+  serviceName: string;
 };
 
-const AddNumberModal = ({ showModal, setShowModal,date,expire,serviceName,stt }: addnumberModalType) => {
+const AddNumberModal = ({
+  showModal,
+  setShowModal,
+  date,
+  expire,
+  serviceName,
+  stt,
+}: addnumberModalType) => {
   return (
     <Modal
       title="Số thứ tự được cấp"

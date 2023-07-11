@@ -14,7 +14,6 @@ import {
 } from "../../app/progressionSlice";
 import { ProgressionType } from "../../propTypes/progressionType";
 import { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
-import Main from "../../Components/MainLayout";
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -108,37 +107,35 @@ const Report = () => {
   const handleExportFile = () => {};
 
   return (
-    <Main>
-      <div style={{ display: "flex", height: "100vh" }}>
-        <Content
-          style={{
-            margin: "24px 16px 0",
-            backgroundColor: "#EAEAEC",
-          }}
-        >
-          <div className="wrap-device">
-            <div className="wrap-select">
-              <div className="select">
-                <label>Chọn thời gian</label>
-                <RangePicker format={dateFormat} onChange={handleChangeDate} />
-              </div>
+    <div style={{ display: "flex", height: "100vh" }}>
+      <Content
+        style={{
+          margin: "24px 16px 0",
+          backgroundColor: "#EAEAEC",
+        }}
+      >
+        <div className="wrap-device">
+          <div className="wrap-select">
+            <div className="select">
+              <label>Chọn thời gian</label>
+              <RangePicker format={dateFormat} onChange={handleChangeDate} />
             </div>
           </div>
-          <Table
-            columns={columns}
-            dataSource={reportLists}
-            style={{ marginTop: "15px" }}
-            className="report"
-          />
-        </Content>
-        <div className="add-device">
-          <div className="icon-add-device" onClick={handleExportFile}>
-            <AiFillPlusSquare />
-          </div>
-          <div className="text-add-device">Tải về</div>
         </div>
+        <Table
+          columns={columns}
+          dataSource={reportLists}
+          style={{ marginTop: "15px" }}
+          className="report"
+        />
+      </Content>
+      <div className="add-device">
+        <div className="icon-add-device" onClick={handleExportFile}>
+          <AiFillPlusSquare />
+        </div>
+        <div className="text-add-device">Tải về</div>
       </div>
-    </Main>
+    </div>
   );
 };
 

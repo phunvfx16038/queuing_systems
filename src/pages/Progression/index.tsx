@@ -21,7 +21,6 @@ import {
 } from "../../app/progressionSlice";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { RangePickerProps } from "antd/es/date-picker";
-import Main from "../../Components/MainLayout";
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -191,92 +190,91 @@ const Progression = () => {
   };
 
   return (
-    <Main>
-      <div style={{ display: "flex", height: "100vh" }}>
-        <Content
-          style={{
-            margin: "24px 16px 0",
-            backgroundColor: "#EAEAEC",
-          }}
-        >
-          <h3>Quản lý cấp số</h3>
-          <div className="wrap-device">
-            <div className="wrap-select">
-              <div className="select" style={{ width: "180px" }}>
-                <label>Tên dịch vụ </label>
-                <Select
-                  placeholder="Tất cả"
-                  style={{ width: "100%" }}
-                  onChange={handleChangeServiceName}
-                  value={serviceNameSelect}
-                  options={[
-                    { value: "all", label: "Tất cả" },
-                    { value: "Khám phụ khoa", label: "Khám phụ khoa" },
-                    { value: "Khám răng hàm mặt", label: "Khám răng hàm mặt" },
-                    { value: "Khám tai mũi họng", label: "Khám tai mũi họng" },
-                    { value: "Khám tổng quát", label: "Khám tổng quát" },
-                    { value: "Khám hô hấp", label: "Khám hô hấp" },
-                  ]}
-                />
-              </div>
-              <div className="select" style={{ width: "180px" }}>
-                <label>Tình trạng </label>
-                <Select
-                  placeholder="Tất cả"
-                  style={{ width: "100%" }}
-                  onChange={handleChangeActive}
-                  value={activeSelect}
-                  options={[
-                    { value: "all", label: "Tất cả" },
-                    { value: "waiting", label: "Đang chờ" },
-                    { value: "used", label: "Đã sử dụng" },
-                    { value: "skip", label: "Bỏ qua" },
-                  ]}
-                />
-              </div>
-              <div className="select" style={{ width: "180px" }}>
-                <label>Nguồn cấp </label>
-                <Select
-                  placeholder="Tất cả"
-                  style={{ width: "100%" }}
-                  onChange={handleChangeSupply}
-                  value={supplySelect}
-                  options={[
-                    { value: "all", label: "Tất cả" },
-                    { value: "kiosk", label: "Kiosk" },
-                    { value: "Hệ thống", label: "Hệ thống" },
-                  ]}
-                />
-              </div>
-              <div className="select" style={{ width: "180px" }}>
-                <label>Chọn thời gian</label>
-                <RangePicker format={dateFormat} onChange={handleChangeDate} />
-              </div>
-            </div>
-            <div style={{ width: "180px" }}>
-              <label>Từ khóa</label>
-              <Search
-                placeholder="Nhập từ khóa"
-                allowClear
-                onSearch={onSearch}
+    <div style={{ display: "flex", height: "100vh" }}>
+      <Content
+        style={{
+          margin: "24px 16px 0",
+          backgroundColor: "#EAEAEC",
+        }}
+      >
+        <h3>Quản lý cấp số</h3>
+        <div className="wrap-device">
+          <div className="wrap-select">
+            <div className="select" style={{ width: "180px" }}>
+              <label>Tên dịch vụ </label>
+              <Select
+                placeholder="Tất cả"
                 style={{ width: "100%" }}
+                onChange={handleChangeServiceName}
+                value={serviceNameSelect}
+                options={[
+                  { value: "all", label: "Tất cả" },
+                  { value: "Khám phụ khoa", label: "Khám phụ khoa" },
+                  { value: "Khám răng hàm mặt", label: "Khám răng hàm mặt" },
+                  { value: "Khám tai mũi họng", label: "Khám tai mũi họng" },
+                  { value: "Khám tổng quát", label: "Khám tổng quát" },
+                  { value: "Khám hô hấp", label: "Khám hô hấp" },
+                ]}
               />
             </div>
+            <div className="select" style={{ width: "180px" }}>
+              <label>Tình trạng </label>
+              <Select
+                placeholder="Tất cả"
+                style={{ width: "100%" }}
+                onChange={handleChangeActive}
+                value={activeSelect}
+                options={[
+                  { value: "all", label: "Tất cả" },
+                  { value: "waiting", label: "Đang chờ" },
+                  { value: "used", label: "Đã sử dụng" },
+                  { value: "skip", label: "Bỏ qua" },
+                ]}
+              />
+            </div>
+            <div className="select" style={{ width: "180px" }}>
+              <label>Nguồn cấp </label>
+              <Select
+                placeholder="Tất cả"
+                style={{ width: "100%" }}
+                onChange={handleChangeSupply}
+                value={supplySelect}
+                options={[
+                  { value: "all", label: "Tất cả" },
+                  { value: "kiosk", label: "Kiosk" },
+                  { value: "Hệ thống", label: "Hệ thống" },
+                ]}
+              />
+            </div>
+            <div className="select" style={{ width: "180px" }}>
+              <label>Chọn thời gian</label>
+              <RangePicker format={dateFormat} onChange={handleChangeDate} />
+            </div>
           </div>
-          <Table
-            columns={columns}
-            dataSource={progressionLists}
-            style={{ marginTop: "15px" }}
-          />
-        </Content>
-        <div className="add-device" style={{ width: "90px", height: "90px" }}>
-          <div className="icon-add-device" onClick={handleAddNumber}>
-            <AiFillPlusSquare />
+          <div style={{ width: "180px" }}>
+            <label>Từ khóa</label>
+            <Search
+              placeholder="Nhập từ khóa"
+              allowClear
+              onSearch={onSearch}
+              style={{ width: "100%" }}
+            />
           </div>
-          <div className="text-add-device">Cấp số mới</div>
         </div>
+        <Table
+          columns={columns}
+          dataSource={progressionLists}
+          style={{ marginTop: "15px" }}
+          className='progression-table'
+        />
+      </Content>
+      <div className="add-device" style={{ width: "90px", height: "90px" }}>
+        <div className="icon-add-device" onClick={handleAddNumber}>
+          <AiFillPlusSquare />
+        </div>
+        <div className="text-add-device">Cấp số mới</div>
       </div>
-    </Main>
+    </div>
   );
 };
 

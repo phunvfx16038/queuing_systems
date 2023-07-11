@@ -6,6 +6,7 @@ import serviceSlice from './serviceSlice';
 import roleSlice from './roleSlice';
 import progressionSlice from './progressionSlice';
 import authSlice from './authSlice';
+import diarySlice from './diarySlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ export const store = configureStore({
     devices:deviceSlice,
     service:serviceSlice,
     roleManage:roleSlice,
-    progression:progressionSlice
+    progression:progressionSlice,
+    diary:diarySlice
   },
 })
 

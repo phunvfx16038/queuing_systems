@@ -29,7 +29,7 @@ import type { Dayjs } from "dayjs";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./dashboard.css";
-import Main from "../../Components/MainLayout";
+import { useAppSelector } from "../../app/store";
 
 ChartJS.register(
   CategoryScale,
@@ -59,46 +59,92 @@ export const data = {
 
 const { Content } = Layout;
 
-const cardData = [
-  {
-    icon1: <BiCalendarAlt />,
-    title: "Số thứ tự đã cấp",
-    value: 4221,
-    icon2: <BiUpArrowAlt />,
-    percent: 32.41,
-    type: "ble",
-  },
-  {
-    icon1: <BiCalendarCheck />,
-    title: "Số thứ tự đã sử dụng",
-    value: 3721,
-    icon2: <BiDownArrowAlt />,
-    percent: 12.3,
-    type: "green",
-  },
-  {
-    icon1: <BiUserVoice />,
-    title: "Số thứ tự đang chờ",
-    value: 468,
-    icon2: <BiUpArrowAlt />,
-    percent: 32.41,
-    type: "orange",
-  },
-  {
-    icon1: <CiBookmarkRemove />,
-    title: "Số thứ tự đã bỏ qua",
-    value: 32,
-    icon2: <BiDownArrowAlt />,
-    percent: 32.41,
-    type: "red",
-  },
-];
 const onPanelChange = (value: Dayjs, mode: CalendarMode) => {
   console.log(value.format("YYYY-MM-DD"), mode);
 };
 const DashBoard = () => {
   const { token } = theme.useToken();
+  const orderNumber = useAppSelector((state) => state.progression.progression);
+  const serviceNumber = useAppSelector((state) => state.service.service);
+  const deviceNumber = useAppSelector((state) => state.devices.device);
+  const [usedNumber, setUsedNumber] = useState(0);
+  const [waitingNumber, setWaitingNumber] = useState(0);
+  const [skipNumber, setSkipNumber] = useState(0);
+  const [activeDevceNumber, setActiveDeviceNumber] = useState(0);
+  const [inactiveDeciceNumber, setInactiveDeviceNumber] = useState(0);
+  const [activeServiceNumber, setActiveServiceNumber] = useState(0);
+  const [inactiveServiceNumber, setInactiveServiceNumber] = useState(0);
 
+  useEffect(() => {
+    const getNumber = () => {
+      const skip = orderNumber.filter((number) => {
+        return number.state.toLowerCase() === "skip";
+      });
+      setSkipNumber(skip.length);
+      const waiting = orderNumber.filter((number) => {
+        return number.state.toLowerCase() === "waiting";
+      });
+      setWaitingNumber(waiting.length);
+      const used = orderNumber.filter((number) => {
+        return number.state.toLowerCase() === "used";
+      });
+      setUsedNumber(used.length);
+      const serviceActive = serviceNumber.filter((number) => {
+        return number.active === true;
+      });
+      setActiveServiceNumber(serviceActive.length);
+      const serviceInactive = serviceNumber.filter((number) => {
+        return number.active === false;
+      });
+      setInactiveServiceNumber(serviceInactive.length);
+      const deviceActive = deviceNumber.filter((number) => {
+        return number.active === true;
+      });
+      setActiveDeviceNumber(deviceActive.length);
+      const deviceInActive = deviceNumber.filter((number) => {
+        return number.active === false;
+      });
+      setInactiveDeviceNumber(deviceInActive.length);
+    };
+
+    if (orderNumber) {
+      getNumber();
+    }
+  }, [deviceNumber, orderNumber, serviceNumber]);
+  const cardData = [
+    {
+      icon1: <BiCalendarAlt />,
+      title: "Số thứ tự đã cấp",
+      value: orderNumber.length,
+      icon2: <BiUpArrowAlt />,
+      percent: 32.41,
+      type: "blue",
+    },
+    {
+      icon1: <BiCalendarCheck />,
+      title: "Số thứ tự đã sử dụng",
+      value: usedNumber,
+      icon2: <BiDownArrowAlt />,
+      percent: 12.3,
+      type: "green",
+    },
+    {
+      icon1: <BiUserVoice />,
+      title: "Số thứ tự đang chờ",
+      value: waitingNumber,
+      icon2: <BiUpArrowAlt />,
+      percent: 32.41,
+      type: "orange",
+    },
+    {
+      icon1: <CiBookmarkRemove />,
+      title: "Số thứ tự đã bỏ qua",
+      value: skipNumber,
+      icon2: <BiDownArrowAlt />,
+      percent: 32.41,
+      type: "red",
+    },
+  ];
   const wrapperStyle: React.CSSProperties = {
     width: 330,
     border: `1px solid ${token.colorBorderSecondary}`,
@@ -121,7 +167,7 @@ const DashBoard = () => {
       },
     ],
   });
-  const [chartOption, setChartOption] = useState<ChartOptions>({
+  const [chartOption] = useState<ChartOptions>({
     responsive: true,
     plugins: {
       // title: {
@@ -186,181 +232,179 @@ const DashBoard = () => {
     setSelected(value);
   };
   return (
-    <Main>
-      <div style={{ display: "flex", height: "100vh" }}>
-        <Content
-          style={{
-            margin: "24px 16px 0",
-            backgroundColor: "#EAEAEC",
-            width: "66.66%",
-          }}
-        >
-          <h3>Biểu đồ cấp số</h3>
-          <Row gutter={[16, 16]}>
-            {cardData.map((card, index) => (
-              <Col span={6} key={index}>
-                <CardLevel
-                  icon1={card.icon1}
-                  icon2={card.icon2}
-                  percent={card.percent}
-                  title={card.title}
-                  value={card.value}
-                  type={card.type}
-                />
-              </Col>
-            ))}
-          </Row>
-          <div className="wrap-chart">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                margin: "20px 0",
-              }}
-            >
-              <h4>Bảng thống kê theo {selected}</h4>
-              <div>
-                <span style={{ marginRight: "15px" }}>Xem theo</span>
-                <Select
-                  defaultValue="Tháng"
-                  style={{ width: 120 }}
-                  onChange={handleChange}
-                  options={[
-                    { value: "ngày", label: "Ngày" },
-                    { value: "tuần", label: "Tuần" },
-                    { value: "tháng", label: "Tháng" },
-                  ]}
-                />
-              </div>
-            </div>
-            <Line options={chartOption} data={chartData} />
-          </div>
-        </Content>
-        <div
-          style={{
-            width: "33.33%",
-            padding: "16px 10px",
-            backgroundColor: "#FFFFFF",
-            boxShadow: "2px 2px 15px rgba(70, 64, 67, 0.1)",
-          }}
-        >
-          <h3>Tổng quan</h3>
-          <div className="overview-card">
-            <div className="over-view-progress">
-              <Progress
-                type="circle"
-                percent={90}
-                strokeColor={{ "100%": "#FF7506" }}
-                size={50}
+    <div style={{ display: "flex", height: "100vh" }}>
+      <Content
+        style={{
+          margin: "24px 16px 0",
+          backgroundColor: "#EAEAEC",
+          width: "66.66%",
+        }}
+      >
+        <h3>Biểu đồ cấp số</h3>
+        <Row gutter={[16, 16]}>
+          {cardData.map((card, index) => (
+            <Col span={6} key={index}>
+              <CardLevel
+                icon1={card.icon1}
+                icon2={card.icon2}
+                percent={card.percent}
+                title={card.title}
+                value={card.value}
+                type={card.type}
               />
-              <div className="overview-value">
-                <p>4221</p>
-                <span className="overview-icon">
-                  <CiMonitor style={{ marginRight: "5px" }} />
-                  Thiết bị
-                </span>
-              </div>
-            </div>
-            <div className="overview-status">
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="circle"></div>
-                <div className="status">
-                  <p>Đang hoạt động</p>
-                  <span>3799</span>
-                </div>
-              </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="circle"></div>
-                <div className="status">
-                  <p>Ngưng hoạt động</p>
-                  <span>422</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="overview-card">
-            <div className="over-view-progress">
-              <Progress
-                type="circle"
-                percent={90}
-                strokeColor={{ "100%": "#FF7506" }}
-                size={50}
+            </Col>
+          ))}
+        </Row>
+        <div className="wrap-chart">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "20px 0",
+            }}
+          >
+            <h4>Bảng thống kê theo {selected}</h4>
+            <div>
+              <span style={{ marginRight: "15px" }}>Xem theo</span>
+              <Select
+                defaultValue="Tháng"
+                style={{ width: 120 }}
+                onChange={handleChange}
+                options={[
+                  { value: "ngày", label: "Ngày" },
+                  { value: "tuần", label: "Tuần" },
+                  { value: "tháng", label: "Tháng" },
+                ]}
               />
-              <div className="overview-value">
-                <p>4221</p>
-                <span className="overview-icon">
-                  <CiGrid42 style={{ marginRight: "5px" }} />
-                  Dịch vụ
-                </span>
-              </div>
-            </div>
-            <div className="overview-status">
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="circle"></div>
-                <div className="status">
-                  <p>Đang hoạt động</p>
-                  <span>210</span>
-                </div>
-              </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="circle"></div>
-                <div className="status">
-                  <p>Ngưng hoạt động</p>
-                  <span>66</span>
-                </div>
-              </div>
             </div>
           </div>
-          <div className="overview-card">
-            <div className="over-view-progress">
-              <Progress
-                type="circle"
-                percent={90}
-                strokeColor={{ "100%": "#FF7506" }}
-                size={50}
-              />
-              <div className="overview-value">
-                <p>4221</p>
-                <span className="overview-icon">
-                  <CiReceipt style={{ marginRight: "5px" }} />
-                  Cấp số
-                </span>
-              </div>
-            </div>
-            <div className="overview-status">
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="circle"></div>
-                <div className="status">
-                  <p>Đang chờ</p>
-                  <span>3721</span>
-                </div>
-              </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="circle"></div>
-                <div className="status">
-                  <p>Đã sử dụng</p>
-                  <span>468</span>
-                </div>
-              </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div className="circle"></div>
-                <div className="status">
-                  <p>Bỏ qua</p>
-                  <span>32</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div style={wrapperStyle}>
-            <Calendar
-              calendarType="ISO 8601"
-              locale="en-EN"
-              defaultValue={new Date()}
+          <Line options={chartOption} data={chartData} />
+        </div>
+      </Content>
+      <div
+        style={{
+          width: "33.33%",
+          padding: "16px 10px",
+          backgroundColor: "#FFFFFF",
+          boxShadow: "2px 2px 15px rgba(70, 64, 67, 0.1)",
+        }}
+      >
+        <h3>Tổng quan</h3>
+        <div className="overview-card">
+          <div className="over-view-progress">
+            <Progress
+              type="circle"
+              percent={90}
+              strokeColor={{ "100%": "#FF7506" }}
+              size={50}
             />
+            <div className="overview-value">
+              <p>{deviceNumber.length}</p>
+              <span className="overview-icon">
+                <CiMonitor style={{ marginRight: "5px" }} />
+                Thiết bị
+              </span>
+            </div>
+          </div>
+          <div className="overview-status">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="circle"></div>
+              <div className="status">
+                <p>Đang hoạt động</p>
+                <span>{activeDevceNumber}</span>
+              </div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="circle"></div>
+              <div className="status">
+                <p>Ngưng hoạt động</p>
+                <span>{inactiveDeciceNumber}</span>
+              </div>
+            </div>
           </div>
         </div>
+        <div className="overview-card">
+          <div className="over-view-progress">
+            <Progress
+              type="circle"
+              percent={90}
+              strokeColor={{ "100%": "#FF7506" }}
+              size={50}
+            />
+            <div className="overview-value">
+              <p>{serviceNumber.length}</p>
+              <span className="overview-icon">
+                <CiGrid42 style={{ marginRight: "5px" }} />
+                Dịch vụ
+              </span>
+            </div>
+          </div>
+          <div className="overview-status">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="circle"></div>
+              <div className="status">
+                <p>Đang hoạt động</p>
+                <span>{activeServiceNumber}</span>
+              </div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="circle"></div>
+              <div className="status">
+                <p>Ngưng hoạt động</p>
+                <span>{inactiveServiceNumber}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="overview-card">
+          <div className="over-view-progress">
+            <Progress
+              type="circle"
+              percent={90}
+              strokeColor={{ "100%": "#FF7506" }}
+              size={50}
+            />
+            <div className="overview-value">
+              <p>{orderNumber.length}</p>
+              <span className="overview-icon">
+                <CiReceipt style={{ marginRight: "5px" }} />
+                Cấp số
+              </span>
+            </div>
+          </div>
+          <div className="overview-status">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="circle"></div>
+              <div className="status">
+                <p>Đang chờ</p>
+                <span>{waitingNumber}</span>
+              </div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="circle"></div>
+              <div className="status">
+                <p>Đã sử dụng</p>
+                <span>{usedNumber}</span>
+              </div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="circle"></div>
+              <div className="status">
+                <p>Bỏ qua</p>
+                <span>{skipNumber}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style={wrapperStyle}>
+          <Calendar
+            calendarType="ISO 8601"
+            locale="en-EN"
+            defaultValue={new Date()}
+          />
+        </div>
       </div>
-    </Main>
+    </div>
   );
 };
 

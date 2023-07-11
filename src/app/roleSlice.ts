@@ -5,6 +5,7 @@ import { roleProp } from "../propTypes/roleType"
 
 export type initProp = {
     roleManage:roleProp[]
+    roleManageCustom:roleProp[]
     isLoading:boolean,
     isError:undefined|string
 }
@@ -13,6 +14,7 @@ export const roleManageCollection = collection(db,'roleManage')
 
 const initialState:initProp = {
     roleManage:[],
+    roleManageCustom:[],
     isLoading:false,
     isError:undefined
 }
@@ -60,7 +62,10 @@ export const roleSlice = createSlice({
         getRoleManage:(state,action)=>{
             state.roleManage = action.payload
         },
+        getRoleManageCustom:(state,action)=>{
+            state.roleManageCustom = action.payload
+        },
     }
 })
-export const {getRoleManage} = roleSlice.actions
+export const {getRoleManage,getRoleManageCustom} = roleSlice.actions
 export default roleSlice.reducer

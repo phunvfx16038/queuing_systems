@@ -24,8 +24,9 @@ const baseUrl = 'http://localhost:8080'
 export const createNewUser = createAsyncThunk(
     'user/createNewUser',
     async(data:userType)=>{
+        const email = `${data.user_name}@gmail.com`
         try{
-            const res = await createUserWithEmailAndPassword(auth, data.email, data.password)
+            const res = await createUserWithEmailAndPassword(auth, email, data.password)
             await setDoc(doc(db,'users', res.user.uid),{
                 ...data
             })
