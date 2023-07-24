@@ -1,5 +1,5 @@
-import React, { MouseEvent, useEffect, useState } from "react";
-import { Button, Modal } from "antd";
+import React from "react";
+import { Modal } from "antd";
 import "./addNumber.css";
 
 type addnumberModalType = {

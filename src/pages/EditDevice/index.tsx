@@ -21,14 +21,10 @@ const EditDevice = () => {
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [ipAddress, setIpAddress] = useState("");
-  const [type, setType] = useState("");
   const [logInName, setLogInName] = useState("");
   const [password, setPassword] = useState("");
   const [usingService, setUsingService] = useState<string[]>([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const onChangeSelectTypeDevice = (value: string) => {
-    setType(value);
-  };
 
   const onChangeSelectUsingServiceDevice = (value: string[]) => {
     setUsingService(value);
@@ -114,11 +110,7 @@ const EditDevice = () => {
                 ]}
                 initialValue={editData.type}
               >
-                <Select
-                  placeholder="Chọn loại thiết bị"
-                  allowClear
-                  onChange={onChangeSelectTypeDevice}
-                >
+                <Select placeholder="Chọn loại thiết bị" allowClear>
                   <Option value="kiosk">Kiosk</Option>
                   <Option value="Display Counter">Display Counter</Option>
                 </Select>

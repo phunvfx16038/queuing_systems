@@ -55,7 +55,6 @@ const DetailService = () => {
   );
   const [detailTableData, setDetailTableData] = useState<tableProp[]>([]);
   const [activeSelect, setActiveSelect] = useState<string>("");
-  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const detailData: any = progression.filter((detail) => {
@@ -68,7 +67,6 @@ const DetailService = () => {
   }, [progression]);
 
   const onSearch = (value: string) => {
-    setSearch(value);
     const searchRoleData = initdetailTableData.filter((progression) => {
       return progression.stt.toString() === value;
     });

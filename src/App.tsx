@@ -36,6 +36,7 @@ import { diaryCollection, getDiarys } from "./app/diarySlice";
 import { getProgressions, progressionCollection } from "./app/progressionSlice";
 import { deviceCollection, getDevices } from "./app/deviceSlice";
 import { getServices, serviceCollection } from "./app/serviceSlice";
+import { getUsers, userCollection } from "./app/userSlice";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -51,8 +52,6 @@ function App() {
         };
 
         dispatch(checkSignIn(data));
-
-        console.log("uid", uid);
       } else {
         // User is signed out
         const resetLoginData = {
@@ -109,6 +108,15 @@ function App() {
       });
     });
   }, [dispatch]);
+  onSnapshot(userCollection, (snapshot) => {
+    let data: any = snapshot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        ...doc.data(),
+      };
+    });
+    dispatch(getUsers(data));
+  });
   return (
     <div className="App">
       <Routes>

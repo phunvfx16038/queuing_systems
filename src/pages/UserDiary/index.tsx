@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Input, Table, DatePicker, DatePickerProps } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useNavigate } from "react-router-dom";
-
 import dayjs from "dayjs";
-import { diaryType } from "../../propTypes/diaryType";
 import { RangePickerProps } from "antd/es/date-picker";
 import { onSnapshot } from "firebase/firestore";
 import { diaryCollection, getDiarys } from "../../app/diarySlice";

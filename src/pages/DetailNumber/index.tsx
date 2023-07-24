@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 const { Content } = Layout;
 
 const DetailNumber = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const progressionDetail = location.state.record;
   const handleEditDevice = () => {};

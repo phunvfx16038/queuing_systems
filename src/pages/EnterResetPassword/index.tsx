@@ -9,9 +9,6 @@ import { confirmPasswordReset } from "firebase/auth";
 
 const EnterResetPassword = () => {
   const navigate = useNavigate();
-  // const pathname = useLocation();
-  // const data = pathname.search.split("&");
-  // const code = data[1].split("=")[1];
   const [searchParams] = useSearchParams();
   let oobCode: string | null = searchParams.get("oobCode");
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +21,6 @@ const EnterResetPassword = () => {
         navigate("/login");
       } else {
         window.alert("Something is wrong; try again later!");
-        console.log("missing oobCode");
       }
     } catch (error: any) {
       console.log(error.message);

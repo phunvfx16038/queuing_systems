@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Input, Table, DatePicker } from "antd";
-import type { ColumnsType, TableProps } from "antd/es/table";
-import { useNavigate } from "react-router-dom";
+import type { ColumnsType } from "antd/es/table";
 import { AiFillPlusSquare } from "react-icons/ai";
 import dayjs from "dayjs";
-import { reportType } from "../../propTypes/reportType";
 import "./report.css";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { onSnapshot } from "firebase/firestore";
@@ -16,7 +14,6 @@ import { ProgressionType } from "../../propTypes/progressionType";
 import { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
 
 const { Content } = Layout;
-const { Search } = Input;
 
 const columns: ColumnsType<ProgressionType> = [
   {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaBell } from "react-icons/fa";
-import { Layout, Badge, Dropdown, MenuProps } from "antd";
+import { Layout, Badge } from "antd";
 import avatar from "../../assets/images/avatar.png";
 import "./header.css";
 import BreadCrumb from "../BreadCrumb";

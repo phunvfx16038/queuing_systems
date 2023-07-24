@@ -11,7 +11,6 @@ import type { ColumnsType } from "antd/es/table";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { onSnapshot } from "firebase/firestore";
-import { serviceProp } from "../../propTypes/serviceType";
 import dayjs from "dayjs";
 import { ProgressionType } from "../../propTypes/progressionType";
 import "./progression.css";
@@ -112,12 +111,10 @@ const Progression = () => {
 
   const navigate = useNavigate();
   const [activeSelect, setActiveSelect] = useState<string>("");
-  const [search, setSearch] = useState("");
   const [serviceNameSelect, setServiceNameSelect] = useState("");
   const [supplySelect, setSupplySelect] = useState("");
 
   const onSearch = (value: string) => {
-    setSearch(value);
     const searchRoleData = progressionData.filter((progression) => {
       return progression.customer_name
         .toLowerCase()
@@ -265,7 +262,7 @@ const Progression = () => {
           columns={columns}
           dataSource={progressionLists}
           style={{ marginTop: "15px" }}
-          className='progression-table'
+          className="progression-table"
         />
       </Content>
       <div className="add-device" style={{ width: "90px", height: "90px" }}>

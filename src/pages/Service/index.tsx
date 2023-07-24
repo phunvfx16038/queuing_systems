@@ -76,7 +76,6 @@ const Service = () => {
   const services = useAppSelector((state) => state.service.service);
   const [servicesData, setServicesData] = useState(services);
   const [activeSelect, setActiveSelect] = useState<string>("");
-  const [search, setSearch] = useState("");
   const dispatch = useAppDispatch();
   useEffect(() => {
     onSnapshot(serviceCollection, (snapshot) => {
@@ -104,7 +103,6 @@ const Service = () => {
   };
 
   const onSearch = (value: string) => {
-    setSearch(value);
     const searchDeviceData = services.filter((service) => {
       return (
         service.service_code.toLowerCase().includes(value.toLowerCase()) ||

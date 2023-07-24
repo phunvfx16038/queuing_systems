@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Input, Table, DatePicker } from "antd";
+import { Layout, Input, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { roleProp } from "../../propTypes/roleType";
 import { useAppDispatch, useAppSelector } from "../../app/store";
-import {
-  getRoleManage,
-  getRoleManageCustom,
-  roleManageCollection,
-} from "../../app/roleSlice";
+import { getRoleManageCustom, roleManageCollection } from "../../app/roleSlice";
 import { onSnapshot } from "firebase/firestore";
 const { Content } = Layout;
 const { Search } = Input;
@@ -52,24 +48,20 @@ const Managerole = () => {
   const [search, setSearch] = useState("");
 
   const customManageRoleData = () => {
-    const mangegeroleCustom = roleManage.map((item) => {
-      // Object.values(
-      const custom = userData.reduce((a, user) => {
-        console.log(item);
-        const { role } = user;
-        a = { ...item, userNumber: 0 };
-        a.userNumber++;
-        return a;
-      }, Object.create(null));
-      // );
-      return custom;
-    });
-
-    return mangegeroleCustom;
+    const data = roleManageData.reduce((stra: any, current) => {
+      const fiterUserRole = userData.filter((user) => {
+        return user.role.toLowerCase() === current.role_name.toLowerCase();
+      });
+      const newCount = {
+        count: fiterUserRole.length,
+        name: current.role_name,
+      };
+      return (stra = { ...newCount });
+    }, {});
+    return data;
   };
 
   customManageRoleData();
-  console.log(customManageRoleData());
 
   useEffect(() => {
     onSnapshot(roleManageCollection, (snapshot) => {
@@ -82,8 +74,6 @@ const Managerole = () => {
       const mangegeroleCustom = data.map((item: any) => {
         // Object.values(
         const custom = userData.reduce((a, user) => {
-          console.log(item);
-          const { role } = user;
           a = { ...item, userNumber: 0 };
           a.userNumber = a.userNumber + 1;
           return a;

@@ -4,7 +4,6 @@ import { Avatar, Col, Layout, Row, Form, Input } from "antd";
 import avatar from "../../assets/images/avatar.png";
 import "./userProfile.css";
 import { useAppSelector } from "../../app/store";
-import Main from "../../Components/MainLayout";
 
 const { Content } = Layout;
 

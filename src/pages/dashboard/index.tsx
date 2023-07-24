@@ -24,8 +24,6 @@ import {
 import { CiBookmarkRemove } from "react-icons/ci";
 import { CiGrid42, CiMonitor, CiReceipt } from "react-icons/ci";
 import { theme } from "antd";
-import type { CalendarMode } from "antd/es/calendar/generateCalendar";
-import type { Dayjs } from "dayjs";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./dashboard.css";
@@ -59,9 +57,6 @@ export const data = {
 
 const { Content } = Layout;
 
-const onPanelChange = (value: Dayjs, mode: CalendarMode) => {
-  console.log(value.format("YYYY-MM-DD"), mode);
-};
 const DashBoard = () => {
   const { token } = theme.useToken();
   const orderNumber = useAppSelector((state) => state.progression.progression);

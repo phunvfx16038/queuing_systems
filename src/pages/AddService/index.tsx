@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Layout,
-  Select,
-  Input,
-  Row,
-  Col,
-  Form,
-  Button,
-  SelectProps,
-  Checkbox,
-} from "antd";
+import { Layout, Input, Row, Col, Form, Button, Checkbox } from "antd";
 import { serviceProp } from "../../propTypes/serviceType";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { addService } from "../../app/serviceSlice";

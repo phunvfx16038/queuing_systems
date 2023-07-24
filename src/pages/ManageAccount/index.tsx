@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Input, Table, DatePicker, Select } from "antd";
+import { Layout, Input, Table, Select } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillPlusSquare } from "react-icons/ai";
@@ -74,7 +74,6 @@ const ManageAccount = () => {
   const navigate = useNavigate();
   const manageAccountData = useAppSelector((state) => state.user.user);
   const [manageAccounts, setManageAccounts] = useState(manageAccountData);
-  const [search, setSearch] = useState("");
   const [active, setActive] = useState("");
 
   useEffect(() => {
@@ -103,7 +102,6 @@ const ManageAccount = () => {
   };
 
   const onSearch = (value: string) => {
-    setSearch(value);
     const searchUserData = manageAccountData.filter((manageaccount) => {
       return (
         manageaccount.displayName.toLowerCase().includes(value.toLowerCase()) ||
